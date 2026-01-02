@@ -1,18 +1,9 @@
-# Blog100
-Welcome to my blog!
+# Personal Website
+Welcome to my personal website!
 
-# Setup
-There's a few commands you can run.
-
-## Starting the dev server
+## Development
 ```
 npm run dev
-```
-
-## Linting
-I don't really agree with how their practices looks, but `create-next-app` said so and I'm too lazy to change it :(
-```
-next lint
 ```
 
 ## Creating a new Post
