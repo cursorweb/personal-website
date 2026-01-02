@@ -5,8 +5,8 @@ import { Noto_Sans } from "next/font/google";
 const noto = Noto_Sans({ subsets: ["latin"], weight: "400" });
 
 export const metadata = {
-    title: "Coder100",
-    description: "The personal website of Coder100",
+    title: "Jerry Zhang",
+    description: "I am Jerry Zhang. A freshman at University of Illinois, Urbana-Champaign majoring in Math and Computer Science.",
 };
 
 export default function RootLayout({
