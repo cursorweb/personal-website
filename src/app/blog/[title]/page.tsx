@@ -8,7 +8,13 @@ export async function generateStaticParams() {
     return paths.map(title => ({ title }));
 }
 
-export default function Post({ params: { title } }: { params: { title: string } }) {
+export default async function Post(props: { params: Promise<{ title: string }> }) {
+    const params = await props.params;
+
+    const {
+        title
+    } = params;
+
     const blog = getBlog(title);
     const idx = getSurroundingBlogs(title);
 

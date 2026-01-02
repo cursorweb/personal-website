@@ -1,29 +1,32 @@
 {
-    "name": "blog100",
+    "name": "personal-website",
     "private": true,
     "scripts": {
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
-        "new": "node src/util/new-page"
+        "lint": "eslint .",
+        "new": "node src/util/new-page.mjs"
     },
     "dependencies": {
         "gray-matter": "^4.0.3",
-        "next": "^13.4.7",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
+        "next": "16.1.1",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
         "showdown": "^2.1.0",
         "typescript": "^5.1.6"
     },
     "devDependencies": {
         "@types/node": "20.3.2",
-        "@types/react": "18.2.14",
+        "@types/react": "19.2.7",
         "@types/showdown": "^2.0.1",
-        "eslint": "^8.43.0",
-        "eslint-config-next": "^13.4.7"
+        "eslint": "^9.39.2",
+        "eslint-config-next": "^16.1.1"
     },
     "engines": {
         "node": "18.x"
+    },
+    "overrides": {
+        "@types/react": "19.2.7"
     }
 }

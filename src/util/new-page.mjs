@@ -1,4 +1,4 @@
-const fs = require("fs");
+import { writeFileSync } from "fs";
 const args = process.argv.slice(2);
 
 if (args.length < 1) {
@@ -17,5 +17,5 @@ bio:
 
 # ${title}`;
 
-fs.writeFileSync(`src/posts/${slug}.md`, template);
+writeFileSync(`src/posts/${slug}.md`, template);
 console.log(`Created file at posts/${slug}.md`);
