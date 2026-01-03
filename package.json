@@ -6,7 +6,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "eslint .",
-        "new": "node src/util/new-page.mjs"
+        "new": "node bin/new-page.mjs"
     },
     "dependencies": {
         "@tailwindcss/postcss": "^4.1.18",
