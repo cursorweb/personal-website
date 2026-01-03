@@ -1,38 +1,19 @@
-import Link from "next/link";
-import styles from "../styles/Index.module.css";
+import { Button } from "@/components/Button";
 
-
-function Section({ children, className = "", ...props }: { children: React.ReactNode, className?: string } & React.ComponentPropsWithoutRef<"section">) {
-    return (
-        <section {...props} className={styles.section + " " + className}>
-            {children}
-        </section>
-    );
-}
-
-export default function Index() {
+export default function Main() {
     return (
         <>
-            <Section id="home">
-                <h1>Coder100</h1>
-                <p>[adjective] Coder</p>
-            </Section>
-
-            <Section id="about">
-                <h2>About</h2>
-                <p>Hi! I do coding stuff and other things too.</p>
-            </Section>
-
-            <Section id="projects">
-                <h2>Projects</h2>
-                <p>For now, check out <Link href="https://coder100s-project-list.coder100.repl.co/" target="_blank">this website</Link>, until I can get my act together.</p>
-            </Section>
-
-            <Section id="blog">
-                <h2>Blog</h2>
-                <p>View my blog!</p>
-                <Link href="/blog">Click here</Link>
-            </Section>
+            <Button />
+            <div className="bg-white dark:bg-gray-800 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5">
+                <div>
+                    <span className="inline-flex items-center justify-center rounded-md bg-indigo-500 p-2 shadow-lg">
+                    </span>
+                </div>
+                <h3 className="text-gray-900 dark:text-white mt-5 text-base font-medium tracking-tight ">Writes upside-down</h3>
+                <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm ">
+                    The Zero Gravity Pen can be used to write in any orientation, including upside-down. It even works in outer space.
+                </p>
+            </div>
         </>
     );
 }
