@@ -1,17 +1,55 @@
 import BlurBackground from "@/components/BlurBackground";
 import { serif } from "./fonts";
 import Link from "next/link";
-import { Button } from "@/components/Button";
 import { MdEmail } from "react-icons/md";
-import { FaFileAlt, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaFileAlt, FaGithub, FaLinkedin, FaChevronDown } from "react-icons/fa";
+import { IconType } from "react-icons";
 
-function ButtonLink({ children, href }: { href: string } & React.PropsWithChildren) {
+function Card() {
+    const quickLinks: { href: string, label: string, Icon: IconType, hover: string }[] = [
+        {
+            href: "/resume.pdf",
+            label: "Resume",
+            Icon: FaFileAlt,
+            hover: "group-hover:text-slate-600",
+        },
+        {
+            href: "https://github.com/cursorweb",
+            label: "GitHub",
+            Icon: FaGithub,
+            hover: "group-hover:text-purple-700",
+        },
+        {
+            href: "https://www.linkedin.com/in/jzhang2029/",
+            label: "LinkedIn",
+            Icon: FaLinkedin,
+            hover: "group-hover:text-[#0a66c2]",
+        },
+        {
+            href: "mailto:jzhang1707@outlook.com",
+            label: "Email",
+            Icon: MdEmail,
+            hover: "group-hover:text-amber-600",
+        },
+    ];
+
     return (
-        <Link href={href} target="blank_">
-            <div className="p-2 border-1 border-zinc-300 my-2 rounded">
-                {children}
-            </div>
-        </Link>
+        <div className="
+            flex gap-2 flex-row md:flex-col
+            rounded-xl
+            backdrop-blur-md
+            bg-white/70 border-black/10
+            p-5
+            md:w-[calc(0.33*748px)]
+            shadow">
+            <h1 className="hidden md:block font-bold text-zinc-400">Quick Links</h1>
+            {quickLinks.map(({ href, label, Icon, hover }, i) => <Link href={href} target="blank_" key={i}>
+                <div className="group p-2 border border-zinc-300 rounded hover:bg-gray-500/30 transition">
+                    <Icon className={`${hover} inline-block m-2`} />
+                    <span className="hidden md:inline">{label}</span>
+                </div>
+            </Link>)}
+        </div>
     );
 }
 
@@ -20,43 +58,24 @@ export default function Main() {
         <>
             <main className="min-h-screen inset-shadow">
                 <BlurBackground />
-                <div className="p-10 flex flex-col min-h-screen items-center">
-                    <div className="flex-grow-1 min-h-full flex flex-col md:justify-between items-center md:flex-row">
-                        <div className="w-[20%] flex flex-col h-full">
-                            {/* big */}
-                            <h1 className={`${serif.className} md:text-9xl md:text-left text-center text-6xl mb-10`}>Jerry Zhang</h1>
-                            <p>Avid programmer, runner, language learner, and musician.</p>
+                <div className="p-10 gap-10 flex flex-col min-h-screen items-center">
+                    {/* landing page horizontal */}
+                    <div className="grow min-w-full min-h-full flex flex-col justify-center gap-10 md:justify-evenly md:flex-row items-center">
+                        {/* hero text */}
+                        <div className="md:text-left text-center flex flex-col h-full">
+                            <h1 className={`${serif.className} font-bold md:text-9xl text-6xl mb-5 md:mb-10`}>Jerry<br />Zhang</h1>
+                            <p className={`${serif.className} text-lg`}>Avid programmer, runner, language learner, and musician.</p>
                         </div>
-                        {/* card */}
-                        <div className="p-5 rounded-xl w-[20%] h-full" style={{
-                            borderRadius: "10px",
-                            backdropFilter: "blur(30px)",
-                            background: "rgba(255, 255, 255, 0.7)",
-                            border: "1px solid rgba(255, 255, 255, 0.5)",
-                        }}>
-                            <h1 className="font-bold text-zinc-400">Quick Links</h1>
-                            <ButtonLink href="/resume.pdf">
-                                <FaFileAlt className="inline-block m-2" />
-                                Resume
-                            </ButtonLink>
-                            <ButtonLink href="https://github.com/cursorweb">
-                                <FaGithub className="inline-block m-2" />
-                                GitHub
-                            </ButtonLink>
-                            <ButtonLink href="https://www.linkedin.com/in/jzhang2029/">
-                                <FaLinkedin className="inline-block m-2" />
-                                Linkedin
-                            </ButtonLink>
-                            <ButtonLink href="mailto:jzhang1707@outlook.com">
-                                <MdEmail className="inline-block m-2" />
-                                Email
-                            </ButtonLink>
-                            <Button />
-                        </div>
+                        <Card />
                     </div>
-                    <div>Down arrow</div>
+                    <div className="rounded-full transition bg-white/30 hover:bg-white/70 hover:text-sky-700 shadow p-5 cursor-pointer">
+                        <FaChevronDown />
+                    </div>
                 </div>
-            </main >
+            </main>
+            <section className="min-h-screen">
+                <h1>Projects</h1>
+            </section>
         </>
     );
 }
