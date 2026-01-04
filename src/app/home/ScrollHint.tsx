@@ -13,7 +13,7 @@ export function ScrollHint() {
             p-5
             cursor-pointer"
             onClick={() => window.scrollTo({
-                top: document.body.scrollHeight,
+                top: window.innerHeight,
                 left: 0,
                 behavior: "smooth"
             })}>

@@ -1,3 +1,25 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+    --color-glass: rgb(255 255 255 / 70%);
+    --color-glass-dark: color-mix(in oklch, var(--color-stone-800) 70%, transparent);
+}
+
+/* .parent {
+    display: inline-flex;
+    flex-direction: row;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.left {}
+
+.right {
+    background: orange;
+    overflow: auto;
+    padding: 20px;
+    flex-grow: 1;
+} */
