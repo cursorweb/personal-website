@@ -12,17 +12,15 @@ export function Overview() {
         <section className="min-h-screen pt-20 relative">
             <BlurBackground colors={["bg-red-500/80", "bg-amber-300/80"]} />
             {/* projects + about */}
-            <div className="px-10 flex flex-row flex-wrap gap-5 items-start">
-                <AboutSection />
-                <ProjectSection />
-            </div>
-
-            {/* split */}
-            <div className="flex flex-row">
-                <h1>About</h1>
-                <h1>Blog</h1>
-
-                <h1>Tools</h1>
+            <div className="px-10 flex flex-row gap-5 items-start">
+                <div className="flex flex-1 flex-col gap-5">
+                    <AboutSection />
+                    <BlogSection />
+                </div>
+                <div className="flex flex-1 flex-col gap-5">
+                    <ProjectSection />
+                    <ToolSection />
+                </div>
             </div>
 
 
@@ -31,10 +29,18 @@ export function Overview() {
     );
 }
 
+function Card({ title, children }: { title: string } & React.PropsWithChildren) {
+    return (
+        <div className="p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
+            <h1 className={`${serif.className} text-2xl font-bold`}>{title}</h1>
+            {children}
+        </div>
+    );
+}
+
 function AboutSection() {
     return (
-        <div className="flex-1 p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
-            <h1 className={`${serif.className} text-2xl font-bold`}>About</h1>
+        <Card title="About">
             <p className="my-5 overflow-hidden">
                 <img src="https://placehold.co/100x100" className="float-left mr-5 relative block" />
                 Hey! My name is Junhao Zhang, but you can call me Jerry. I'm a freshman studying Math and Computer Science at the University of Illinois, Urbana-Champaign.
@@ -53,23 +59,21 @@ function AboutSection() {
                     <FaArrowRight className="inline" />
                 </span>
             </Link>
-        </div>
+        </Card>
     );
 }
 
 function ProjectSection() {
     return (
-        <div className="flex-1 p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
-            <h1 className={`${serif.className} text-2xl font-bold`}>Projects</h1>
-
+        <Card title="Projects">
             <div className="my-5 flex flex-col gap-3">
-                <ProjectCard title="Europa Lang">
-                    europa Lang
-                    [go more into seeing what projects, but also see experience button]
+                <ProjectCard title="Ray Tracer" img="/assets/rtcs128.png">
+                    I worked on a team of three over the course of half a semester to create a
+                    multi-threaded ray tracer written fully in rust for CS 128 honors.
                 </ProjectCard>
-                <ProjectCard title="Ray Tracer">
-                    Ray Tracer
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit ratione quia consequuntur quod hic, ex reiciendis reprehenderit sed eaque tempora doloremque blanditiis quasi est molestias, consectetur nulla laboriosam, veniam ullam?
+                <ProjectCard title="Europa Lang">
+                    An interpreted programming language written in Rust. It's grown to have over 20 stars on its GitHub repository,
+                    with multiple developers contributing to the project.
                 </ProjectCard>
             </div>
 
@@ -84,7 +88,7 @@ function ProjectSection() {
                     <FaArrowRight className="inline" />
                 </span>
             </Link>
-        </div>
+        </Card>
     );
 }
 
@@ -93,7 +97,7 @@ function ProjectCard({ img = "https://placehold.co/300x200", title, children }: 
         <div className="
             inline-flex flex-row
             overflow-hidden
-            h-[200px]
+            h-50
             rounded-xl border border-black/20
             bg-sky-100/30 dark:bg-sky-100/20
             shadow">
@@ -103,5 +107,23 @@ function ProjectCard({ img = "https://placehold.co/300x200", title, children }: 
                 <p className="dark:text-gray-300">{children}</p>
             </div>
         </div>
+    );
+}
+
+function BlogSection() {
+    return (
+        <Card title="Blog">
+            <p>I write in my blog</p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et blanditiis doloremque rem quasi placeat dolore neque temporibus mollitia iure eligendi? Expedita libero minima voluptatum, ratione nostrum magni accusantium earum esse?
+            Repellat sit ipsam perferendis quaerat nemo tempora aspernatur perspiciatis, saepe numquam iure quisquam ratione illo, autem, eum a recusandae enim provident officiis tempore consequuntur consequatur ab nulla maiores. Minima, accusantium!
+        </Card>
+    );
+}
+
+function ToolSection() {
+    return (
+        <Card title="Tools">
+            <p>What's a personal website without functionality?</p>
+        </Card>
     );
 }

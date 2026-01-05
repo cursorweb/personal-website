@@ -80,7 +80,7 @@ function Card() {
             md:w-[calc(0.33*748px)]
             shadow">
             {quickLinks.map(({ href, label, Icon, hover }, i) => (
-                <Link href={href} target="blank_" key={i}>
+                <Link href={href} target="blank_" aria-label={label} key={i}>
                     <div className="group p-2 border border-zinc-300 dark:border-zinc-700 rounded hover:bg-gray-500/30 transition">
                         <Icon className={`${hover} inline-block m-2`} />
                         <span className="hidden md:inline">{label}</span>
