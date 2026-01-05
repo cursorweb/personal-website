@@ -11,11 +11,15 @@ export function Overview() {
     return (
         <section className="min-h-screen pt-20 relative">
             <BlurBackground colors={["bg-red-500/80", "bg-amber-300/80"]} />
-            {/* big horizontal card */}
-            <Projects />
+            {/* projects + about */}
+            <div className="px-10 flex flex-row flex-wrap gap-5 items-start">
+                <AboutSection />
+                <ProjectSection />
+            </div>
 
             {/* split */}
             <div className="flex flex-row">
+                <h1>About</h1>
                 <h1>Blog</h1>
 
                 <h1>Tools</h1>
@@ -27,18 +31,44 @@ export function Overview() {
     );
 }
 
-function Projects() {
+function AboutSection() {
     return (
-        <div className="mx-40 px-10 py-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
+        <div className="flex-1 p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
+            <h1 className={`${serif.className} text-2xl font-bold`}>About</h1>
+            <p className="my-5 overflow-hidden">
+                <img src="https://placehold.co/100x100" className="float-left mr-5 relative block" />
+                Hey! My name is Junhao Zhang, but you can call me Jerry. I'm a freshman studying Math and Computer Science at the University of Illinois, Urbana-Champaign.
+                My interests include game development, web development, AI, and programming language design.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ducimus id porro omnis sed vel cumque ipsa illo deleniti, eligendi dolor minus quibusdam fuga, veritatis similique corporis eaque in harum?
+            </p>
+
+            <Link href="" className="
+                    group inline-block
+                    text-blue-600 hover:text-blue-800 dark:text-blue-500
+                    rounded p-2 border border-black/10 dark:border-white/10
+                    transition
+                    hover:bg-gray-300/80">
+                See more
+                <span className="mx-1 group-hover:pl-1.5 transition-all">
+                    <FaArrowRight className="inline" />
+                </span>
+            </Link>
+        </div>
+    );
+}
+
+function ProjectSection() {
+    return (
+        <div className="flex-1 p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
             <h1 className={`${serif.className} text-2xl font-bold`}>Projects</h1>
 
-            <div className="flex flex-col gap-3">
+            <div className="my-5 flex flex-col gap-3">
                 <ProjectCard title="Europa Lang">
                     europa Lang
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti, similique, iste eaque quo nostrum facere accusamus commodi praesentium aperiam sed explicabo. In autem modi, consectetur recusandae tenetur iure necessitatibus excepturi?
+                    [go more into seeing what projects, but also see experience button]
                 </ProjectCard>
-                <ProjectCard title="Standard Type">
-                    Standard Type
+                <ProjectCard title="Ray Tracer">
+                    Ray Tracer
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit ratione quia consequuntur quod hic, ex reiciendis reprehenderit sed eaque tempora doloremque blanditiis quasi est molestias, consectetur nulla laboriosam, veniam ullam?
                 </ProjectCard>
             </div>
@@ -60,10 +90,6 @@ function Projects() {
 
 function ProjectCard({ img = "https://placehold.co/300x200", title, children }: { img?: string, title: string } & React.PropsWithChildren) {
     return (
-        // <div className="parent">
-        //     <img src="https://placehold.co/300x200" className="left" />
-        //     <div className="right">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam magni cumque nesciunt. Reiciendis ratione quaerat praesentium recusandae nisi numquam velit, dolores, ea eligendi, eum in sequi. Facere similique impedit temporibus?</div>
-        // </div>
         <div className="
             inline-flex flex-row
             overflow-hidden
