@@ -1,3 +1,4 @@
+import { Nav } from "@/components/Nav";
 import "./globals.css";
 import { Providers } from "./providers";
 export const metadata = {
@@ -14,6 +15,7 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body className="selection:bg-sky-600/30 dark:selection:bg-purple-500/30">
                 <Providers>
+                    <Nav />
                     {children}
                 </Providers>
             </body>
