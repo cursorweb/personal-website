@@ -7,19 +7,18 @@
     --color-glass-dark: color-mix(in oklch, var(--color-stone-800) 70%, transparent);
 }
 
-/* .parent {
-    display: inline-flex;
-    flex-direction: row;
-    height: 200px;
-    overflow: hidden;
-    border-radius: 8px;
+.link {
+    color: var(--color-blue-600);
+    border-bottom: 2px solid var(--color-blue-600);
+    transition: all 0.2s;
 }
 
-.left {}
+.link:hover {
+    color: var(--color-blue-800);
+    border-bottom: 2px solid transparent;
+}
 
-.right {
-    background: orange;
-    overflow: auto;
-    padding: 20px;
-    flex-grow: 1;
-} */
+.dark.link {
+    color: var(--color-blue-500);
+    border-bottom: 2px solid var(--color-blue-500);
+}

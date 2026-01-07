@@ -14,7 +14,7 @@ export function HeroPage() {
             <BlurBackground />
             <div className="p-10 gap-10 flex flex-col min-h-screen items-center">
                 {/* landing page horizontal */}
-                <div className="grow min-w-full min-h-full flex flex-col justify-center gap-10 md:justify-evenly md:flex-row items-center">
+                <div className="grow min-w-full min-h-full flex flex-col justify-center gap-16 md:justify-evenly md:flex-row items-center">
                     {/* hero text */}
                     <div className="md:text-left text-center flex flex-col justify-center h-full">
                         <h1 className={`

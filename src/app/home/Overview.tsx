@@ -8,10 +8,10 @@ import Link from "next/link";
 
 export function Overview() {
     return (
-        <section className="min-h-screen pt-20 relative">
+        <section className="min-h-screen p-10 relative">
             <BlurBackground colors={["bg-red-500/80", "bg-amber-300/80"]} />
             {/* projects + about */}
-            <div className="px-10 flex flex-row gap-5 items-start">
+            <div className="flex flex-row gap-5 items-start">
                 <div className="flex flex-1 flex-col gap-5">
                     <AboutSection />
                     <BlogSection />
@@ -52,7 +52,7 @@ function AboutSection() {
                 <img src="https://placehold.co/100x100" className="float-left mr-5 relative block" />
                 Hey! My name is Junhao Zhang, but you can call me Jerry. I'm a freshman studying Math and Computer Science at the University of Illinois, Urbana-Champaign.
                 My interests include game development, web development, AI, and programming language design.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ducimus id porro omnis sed vel cumque ipsa illo deleniti, eligendi dolor minus quibusdam fuga, veritatis similique corporis eaque in harum?
+                Feel free to reach out to me! <Link href="/contact" className="link">Contact me</Link>.
             </p>
         </Card>
     );

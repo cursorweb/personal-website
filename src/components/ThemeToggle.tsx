@@ -23,7 +23,8 @@ export function ThemeToggle() {
     return (
         <button
             onClick={() => setTheme(t => t == "dark" ? "light" : "dark")}
-            className="transition-colors cursor-pointer text-gray-500 dark:text-gray-300 hover:text-black hover:dark:text-white">
+            className="transition-colors cursor-pointer text-gray-500 dark:text-gray-300 hover:text-black hover:dark:text-white"
+            aria-label="Change theme">
             {theme == "dark" ? <FaMoon /> : <MdSunny />}
         </button>
     );
