@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems: { name: string, href: string }[] = [
     {
@@ -15,15 +16,14 @@ const navItems: { name: string, href: string }[] = [
     }
 ];
 
-function NavLink({ href, className = "", children }: { href: string, className?: string } & React.PropsWithChildren) {
+function NavLink({ href, border = true, className = "", children }: { href: string, border?: boolean, className?: string } & React.PropsWithChildren) {
     return (
         <Link
             href={href}
             className={`
-                text-lg text-gray-500 dark:text-gray-300
-                pointer-events-auto
-                hover:text-black hover:border-b-black
-                dark:hover:text-white dark:hover:border-b-white
+                text-lg text-gray-500 dark:text-gray-400
+                hover:text-black dark:hover:text-white
+                ${border ? "hover:border-b-black dark:hover:border-b-white" : ""}
                 transition-colors
                 border-b-2 border-transparent
                 ${className}`}>
@@ -34,17 +34,16 @@ function NavLink({ href, className = "", children }: { href: string, className?:
 
 export function Nav() {
     return (
-        <nav className="fixed p-8 w-full z-1 pointer-events-none
+        <nav className="absolute p-8 pb-4 w-full z-1
             flex flex-row justify-between">
             <div>
-                <NavLink href="/" className="m-auto">Jerry Zhang</NavLink>
+                <NavLink href="/" className="m-auto" border={false}>Jerry Zhang</NavLink>
             </div>
-            <div className={`
-                flex gap-8 flex-row
-                pointer-events-none`}>
+            <div className="flex gap-8 flex-row">
                 {navItems.map(({ name, href }, i) => (
                     <NavLink href={href} key={i}>{name}</NavLink>
                 ))}
+                <ThemeToggle />
             </div>
         </nav>
     );

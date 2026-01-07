@@ -1,5 +1,4 @@
 import BlurBackground from "@/components/BlurBackground";
-import { Button } from "@/components/Button";
 
 import { FaArrowRight } from "react-icons/fa";
 
@@ -22,8 +21,6 @@ export function Overview() {
                     <ToolSection />
                 </div>
             </div>
-
-            <Button />
         </section>
     );
 }
