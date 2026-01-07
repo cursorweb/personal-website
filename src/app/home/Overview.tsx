@@ -23,71 +23,57 @@ export function Overview() {
                 </div>
             </div>
 
-
             <Button />
         </section>
     );
 }
 
-function Card({ title, children }: { title: string } & React.PropsWithChildren) {
+function Card({ title, href, children }: { title: string, href?: string } & React.PropsWithChildren) {
     return (
         <div className="p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
             <h1 className={`${serif.className} text-2xl font-bold`}>{title}</h1>
             {children}
+            {href ? <Link href={href} className="
+                    group inline-block
+                    text-blue-600 hover:text-blue-800 dark:text-blue-500
+                    rounded p-2 border border-black/10 dark:border-white/10
+                    transition
+                    hover:bg-gray-300/80">
+                See more
+                <span className="mx-1 group-hover:pl-1.5 transition-all">
+                    <FaArrowRight className="inline" />
+                </span>
+            </Link> : ""}
         </div>
     );
 }
 
 function AboutSection() {
     return (
-        <Card title="About">
+        <Card title="About" href="about">
             <p className="my-5 overflow-hidden">
                 <img src="https://placehold.co/100x100" className="float-left mr-5 relative block" />
                 Hey! My name is Junhao Zhang, but you can call me Jerry. I'm a freshman studying Math and Computer Science at the University of Illinois, Urbana-Champaign.
                 My interests include game development, web development, AI, and programming language design.
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ducimus id porro omnis sed vel cumque ipsa illo deleniti, eligendi dolor minus quibusdam fuga, veritatis similique corporis eaque in harum?
             </p>
-
-            <Link href="" className="
-                    group inline-block
-                    text-blue-600 hover:text-blue-800 dark:text-blue-500
-                    rounded p-2 border border-black/10 dark:border-white/10
-                    transition
-                    hover:bg-gray-300/80">
-                See more
-                <span className="mx-1 group-hover:pl-1.5 transition-all">
-                    <FaArrowRight className="inline" />
-                </span>
-            </Link>
         </Card>
     );
 }
 
 function ProjectSection() {
     return (
-        <Card title="Projects">
+        <Card title="Projects" href="projects">
             <div className="my-5 flex flex-col gap-3">
                 <ProjectCard title="Ray Tracer" img="/assets/rtcs128.png">
                     I worked on a team of three over the course of half a semester to create a
-                    multi-threaded ray tracer written fully in rust for CS 128 honors.
+                    multi-threaded ray tracer written fully in Rust for CS 128 Honors.
                 </ProjectCard>
                 <ProjectCard title="Europa Lang">
                     An interpreted programming language written in Rust. It's grown to have over 20 stars on its GitHub repository,
                     with multiple developers contributing to the project.
                 </ProjectCard>
             </div>
-
-            <Link href="" className="
-                    group inline-block
-                    text-blue-600 hover:text-blue-800 dark:text-blue-500
-                    rounded p-2 border border-black/10 dark:border-white/10
-                    transition
-                    hover:bg-gray-300/80">
-                See more
-                <span className="mx-1 group-hover:pl-1.5 transition-all">
-                    <FaArrowRight className="inline" />
-                </span>
-            </Link>
         </Card>
     );
 }
@@ -99,9 +85,9 @@ function ProjectCard({ img = "https://placehold.co/300x200", title, children }: 
             overflow-hidden
             h-50
             rounded-xl border border-black/20
-            bg-sky-100/30 dark:bg-sky-100/20
+            bg-sky-100/30 dark:bg-sky-200/10
             shadow">
-            <img src={img} />
+            <img src={img} alt={title} />
             <div className="grow p-5 overflow-auto">
                 <h1 className="text-shadow-2xs font-bold text-lg">{title}</h1>
                 <p className="dark:text-gray-300">{children}</p>
@@ -112,10 +98,9 @@ function ProjectCard({ img = "https://placehold.co/300x200", title, children }: 
 
 function BlogSection() {
     return (
-        <Card title="Blog">
-            <p>I write in my blog</p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et blanditiis doloremque rem quasi placeat dolore neque temporibus mollitia iure eligendi? Expedita libero minima voluptatum, ratione nostrum magni accusantium earum esse?
-            Repellat sit ipsam perferendis quaerat nemo tempora aspernatur perspiciatis, saepe numquam iure quisquam ratione illo, autem, eum a recusandae enim provident officiis tempore consequuntur consequatur ab nulla maiores. Minima, accusantium!
+        <Card title="Blog" href="blog">
+            <p className="my-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, suscipit ut. Esse voluptates labore corrupti quibusdam beatae eum odit laboriosam saepe inventore officiis voluptas, eius molestias nulla quasi dignissimos asperiores.</p>
+            <p className="my-5">I write in my blog</p>
         </Card>
     );
 }
@@ -123,7 +108,7 @@ function BlogSection() {
 function ToolSection() {
     return (
         <Card title="Tools">
-            <p>What's a personal website without functionality?</p>
+            <p className="my-5">What's a personal website without functionality?</p>
         </Card>
     );
 }
