@@ -34,7 +34,7 @@ export function HeroPage() {
                         <p className={`${serif.className} text-lg`}>Avid programmer, language learner, and musician.</p>
                     </div>
                     {/* social media card */}
-                    <Card />
+                    <SocialMedia />
                 </div>
                 <ScrollHint />
             </div>
@@ -42,7 +42,7 @@ export function HeroPage() {
     );
 }
 
-function Card() {
+function SocialMedia() {
     const quickLinks: { href: string, label: string, Icon: IconType, hover: string }[] = [
         {
             href: "/resume.pdf",
@@ -71,15 +71,15 @@ function Card() {
     ];
 
     return (
-        <div className="
-            flex gap-2 flex-row md:flex-col
-            rounded-xl
-            backdrop-blur-md
-            bg-glass
-            dark:bg-glass-dark
-            p-5
-            md:w-[calc(0.33*748px)]
-            shadow">
+        <div className={clsx(
+            "flex gap-2 flex-row md:flex-col",
+            "rounded-xl",
+            "backdrop-blur-md",
+            "bg-glass dark:bg-glass-dark",
+            "p-5",
+            "md:w-[calc(0.33*748px)]",
+            "shadow",
+        )}>
             {quickLinks.map(({ href, label, Icon, hover }, i) => (
                 <Link href={href} target="blank_" aria-label={label} key={i}>
                     <div className="group p-2 border border-zinc-300 dark:border-zinc-700 rounded hover:bg-gray-500/30 transition">

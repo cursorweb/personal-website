@@ -1,8 +1,12 @@
+import clsx from "clsx";
 import React from "react";
 
-export function Card({ children }: React.PropsWithChildren) {
+export function Card({ className, children }: { className?: string } & React.PropsWithChildren) {
     return (
-        <div className="p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
+        <div className={clsx(
+            "p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark",
+            className
+        )}>
             {children}
         </div>
     );

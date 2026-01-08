@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 const count = 15;
 
 function random(min: number, max: number) {
@@ -30,15 +32,14 @@ export default function BlurBackground({ colors = ["bg-sky-400/80", "bg-purple-7
         );
     });
 
-    return <div className="
-        absolute
-        overflow-hidden
-        w-full
-        h-full
-        -z-10
-        blur-[80px]
-        top-0
-        left-0">
+    return <div className={clsx(
+        "absolute",
+        "overflow-hidden",
+        "w-full h-full",
+        "-z-10",
+        "blur-[80px]",
+        "top-0 left-0",
+    )}>
         {divs}
     </div>;
 }

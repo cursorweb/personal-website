@@ -5,6 +5,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { serif } from "../fonts";
 import Link from "next/link";
 import clsx from "clsx";
+import { Card } from "@/components/Card";
 
 
 export function Overview() {
@@ -26,9 +27,9 @@ export function Overview() {
     );
 }
 
-function Card({ title, href, children }: { title: string, href?: string } & React.PropsWithChildren) {
+function SectionCard({ title, href, children }: { title: string, href?: string } & React.PropsWithChildren) {
     return (
-        <div className="p-5 rounded-xl border border-black/10 backdrop-blur-lg bg-glass dark:bg-glass-dark">
+        <Card>
             <h1 className={`${serif.className} text-2xl font-bold`}>{title}</h1>
             {children}
             {href ? <Link href={href} className={clsx(
@@ -43,26 +44,26 @@ function Card({ title, href, children }: { title: string, href?: string } & Reac
                     <FaArrowRight className="inline" />
                 </span>
             </Link> : ""}
-        </div>
+        </Card>
     );
 }
 
 function AboutSection() {
     return (
-        <Card title="About">
+        <SectionCard title="About">
             <p className="my-5 overflow-hidden">
                 <img src="https://placehold.co/100x100" className="float-left mr-5 relative block" />
                 Hey! My name is Junhao Zhang, but you can call me Jerry. I'm a freshman studying Math and Computer Science at the University of Illinois, Urbana-Champaign.
                 My interests include game development, web development, AI, and programming language design.
                 Feel free to reach out! <Link href="/contact" className="link">Contact me</Link>.
             </p>
-        </Card>
+        </SectionCard>
     );
 }
 
 function ProjectSection() {
     return (
-        <Card title="Projects" href="/projects">
+        <SectionCard title="Projects" href="/projects">
             <div className="my-5 flex flex-col gap-3">
                 <ProjectCard title="Ray Tracer" img="/assets/rtcs128.png">
                     I worked on a team of three over the course of half a semester to create a
@@ -73,7 +74,7 @@ function ProjectSection() {
                     with multiple developers contributing to the project.
                 </ProjectCard>
             </div>
-        </Card>
+        </SectionCard>
     );
 }
 
@@ -97,17 +98,17 @@ function ProjectCard({ img = "https://placehold.co/300x200", title, children }: 
 
 function BlogSection() {
     return (
-        <Card title="Blog" href="/blog">
+        <SectionCard title="Blog" href="/blog">
             <p className="my-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, suscipit ut. Esse voluptates labore corrupti quibusdam beatae eum odit laboriosam saepe inventore officiis voluptas, eius molestias nulla quasi dignissimos asperiores.</p>
             <p className="my-5">I write in my blog</p>
-        </Card>
+        </SectionCard>
     );
 }
 
 function ToolSection() {
     return (
-        <Card title="Tools">
+        <SectionCard title="Tools">
             <p className="my-5">What's a personal website without functionality?</p>
-        </Card>
+        </SectionCard>
     );
 }
