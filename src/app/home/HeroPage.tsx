@@ -7,6 +7,7 @@ import { ScrollHint } from "./ScrollHint";
 import { MdEmail } from "react-icons/md";
 import { FaFileAlt, FaGithub, FaLinkedin } from "react-icons/fa";
 import { IconType } from "react-icons";
+import clsx from "clsx";
 
 export function HeroPage() {
     return (
@@ -17,16 +18,16 @@ export function HeroPage() {
                 <div className="grow min-w-full min-h-full flex flex-col justify-center gap-16 md:justify-evenly md:flex-row items-center">
                     {/* hero text */}
                     <div className="md:text-left text-center flex flex-col justify-center h-full">
-                        <h1 className={`
-                                ${serif.className}
-                                text-transparent
-                                bg-clip-text
-                                bg-linear-45 dark:from-white dark:to-sky-500
-                                from-black to-sky-500
-                                font-bold md:text-9xl text-6xl
-                                mb-5 md:mb-10
-                                pb-5
-                            `}>
+                        <h1 className={clsx(
+                            serif.className,
+                            "text-transparent",
+                            "bg-clip-text",
+                            "bg-linear-45 dark:from-white dark:to-sky-500",
+                            "from-black to-sky-500",
+                            "font-bold md:text-9xl text-6xl",
+                            "mb-5 md:mb-10",
+                            "pb-5"
+                        )}>
                             <span className="block">Jerry</span>
                             <span className="block">Zhang</span>
                         </h1>
