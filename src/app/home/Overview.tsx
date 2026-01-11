@@ -66,7 +66,7 @@ function ProjectSection() {
         <SectionCard title="Projects" href="/projects">
             <div className="my-5 flex flex-col gap-3">
                 <ProjectCard title="Ray Tracer" img="/assets/rtcs128.png">
-                    I worked on a team of three over the course of half a semester to create a
+                    I led a team of three over the course of half a semester to create a
                     multi-threaded ray tracer written fully in Rust for CS 128 Honors.
                 </ProjectCard>
                 <ProjectCard title="Europa Lang">
