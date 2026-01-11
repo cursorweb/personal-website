@@ -10,9 +10,12 @@ function randChoice<T>(arr: T[]) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+const MIN_SIZE = 300;
+const MAX_SIZE = 500;
+
 export default function BlurBackground({ colors = ["bg-sky-400/80", "bg-purple-700/80"] }: { colors?: string[] }) {
     const divs = Array.from({ length: count }).map((_, i) => {
-        const size = random(300, 500); // random size
+        const size = random(MIN_SIZE, MAX_SIZE); // random size
         const top = random(-5, 100);
         const left = random(-5, 100);
 
@@ -22,8 +25,10 @@ export default function BlurBackground({ colors = ["bg-sky-400/80", "bg-purple-7
             <div
                 className={`absolute opacity-30 rounded-full ${color}`}
                 style={{
-                    width: size,
-                    height: size,
+                    minWidth: `${(size * (MIN_SIZE / MAX_SIZE))}px`,
+                    minHeight: `${(size * (MIN_SIZE / MAX_SIZE))}px`,
+                    width: `${(size / MAX_SIZE) * 35}vw`,
+                    height: `${(size / MAX_SIZE) * 35}vw`,
                     top: `${top}%`,
                     left: `${left}%`
                 }}
