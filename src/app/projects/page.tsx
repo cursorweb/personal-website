@@ -41,25 +41,33 @@ export default function Projects() {
                     <Link href="https://github.com/pranavpopuri/raytracing-in-rust/">Github</Link>
                     <Link href="https://www.youtube.com/watch?v=4iuJ3HSaAr0">Walkthrough Video</Link>
                 </Card>
-                <Card>
-                    <img src="/assets/europalang.png" />
-                    <div className="text-lg">Europa Lang</div>
+                <div className="font-mono p-5 rounded-xl border border-gray-600 bg-[#f9f3f0] dark:bg-[#1e1e1e]">
+                    <div className="flex flex-row gap-5 mb-5">
+                        <div>
+                            <img src="/assets/europalang.png" className="float-left inline rounded-full border-2 border-dashed border-black dark:border-white" width={300} />
+                        </div>
+                        <div>
+                            <div className="text-2xl mb-2 text-[#569cd6]">&gt; Europa Lang</div>
+                            I've always been fascinated by how programming languages <span className="italic dark:text-[#b5cea8] text-[#098658]">themselves</span> worked.
+                            Learning from the popular <Link href="https://craftinginterpreters.com" className="dark:text-[#c586c0] text-[#af00db] underline hover:no-underline">[ craftinginterpreters ]</Link> tutorial,
+                            I created <span className="dark:text-[#dcdcaa] text-[#795e26]">Europa Lang</span>, inspired by the syntax of <span className="dark:text-[#9cdcfe] text-[#001080]">Rust</span> and <span className="dark:text-[#9cdcfe] text-[#001080]">JavaScript</span>.
+                            It's grown to have over <span className="dark:text-[#4ec9b0] text-[#267f99]">20 stars</span> on GitHub and has had multiple people contribute to the project!
+                        </div>
+                    </div>
                     <div>
-                        I've always been fascinated by how programming languages <span className="italic">themselves</span> worked.
-                        Learning from the popular <Link href="https://craftinginterpreters.com" className="link">craftinginterpreters</Link> tutorial,
-                        I created Europa Lang, inspired by the syntax of Rust and JavaScript.
-                        It's grown to have over 20 stars on GitHub and has had multiple people contribute to the project!
-
-                        <div className="text-lg font-bold">Features</div>
-                        <ul>
+                        <div className="mb-2 dark:text-[#6a9955] text-[#008000]">/** <span className="text-[#569cd6]">Features</span></div>
+                        <ul className="list-['*_'] ml-10 dark:text-[#6a9955] text-[#008000]">
                             <li>Recursive-descent parsing</li>
                             <li>Feature-rich standard library</li>
                             <li>Support for arrays, ranges, and hashmaps</li>
                         </ul>
+                        <div className="mb-2 ml-5 dark:text-[#6a9955] text-[#008000]">*/</div>
                     </div>
-                    <Link href="https://github.com/europalang/Europa-Lang">GitHub</Link>
-                    <Link href="https://marketplace.visualstudio.com/items?itemName=cursorweb.europalang-highlighter">VSCode Extension</Link>
-                </Card>
+                    <div className="flex gap-2">
+                        <Link href="https://github.com/europalang/Europa-Lang" className="dark:text-[#4ec9b0] text-[#267f99] underline hover:no-underline">[ GitHub ]</Link>
+                        <Link href="https://marketplace.visualstudio.com/items?itemName=cursorweb.europalang-highlighter" className="dark:text-[#569cd6] text-[#795e26] underline hover:no-underline">[ VSCode Extension ]</Link>
+                    </div>
+                </div>
                 <Card>
                     <img src="/assets/vectorgolf.png" />
                     <div className="text-lg">Vector Golf</div>
