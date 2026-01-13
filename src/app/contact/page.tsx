@@ -27,7 +27,7 @@ export default function Contact() {
             <div className="mx-30 flex flex-row gap-20 justify-stretch my-5">
                 <div className="p-5 flex-1">
                     <div className="font-bold text-3xl mb-5 text-shadow-md">Feel free to get in touch!</div>
-                    Whether it's talking about new projects, books, or anything else, I'm always excited to meet new people.
+                    Whether it's talking about new projects, books, music, or anything else, I'm always excited to meet new people.
                 </div>
                 <Card className="flex flex-col gap-10 justify-between flex-1 text-center hover:shadow-lg transition">
                     {/* icon */}

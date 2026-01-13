@@ -69,7 +69,7 @@ function ProjectSection() {
                     I led a team of three over the course of half a semester to create a
                     multi-threaded ray tracer written fully in Rust for CS 128 Honors.
                 </ProjectCard>
-                <ProjectCard title="Europa Lang">
+                <ProjectCard title="Europa Lang" img="/assets/europalang.png">
                     An interpreted programming language written in Rust. It's grown to have over 20 stars on its GitHub repository,
                     with multiple developers contributing to the project.
                 </ProjectCard>
