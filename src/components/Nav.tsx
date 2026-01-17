@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { ThemeToggle } from "./ThemeToggle";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
+import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
 const navItems: { name: string, href: string }[] = [
     {
@@ -14,7 +14,7 @@ const navItems: { name: string, href: string }[] = [
     {
         name: "Contact",
         href: "/contact",
-    }
+    },
 ];
 
 const moreItems: { name: string, href: string }[] = [
@@ -27,6 +27,25 @@ const moreItems: { name: string, href: string }[] = [
         href: "/tools",
     },
 ];
+
+export function Nav() {
+    return (
+        <nav className="absolute p-8 pb-4 w-full z-1
+            flex flex-row justify-between">
+            <div>
+                <NavLink href="/" logo>Jerry Zhang</NavLink>
+            </div>
+            <div className="flex gap-8 flex-row">
+                {navItems.map(({ name, href }, i) => (
+                    <NavLink href={href} key={i}>{name}</NavLink>
+                ))}
+                <MoreToggle />
+                <ThemeToggle />
+            </div>
+        </nav>
+    );
+}
+
 
 function NavLink({ href, logo = false, children }: { href: string, logo?: boolean } & React.PropsWithChildren) {
     const path = usePathname();
@@ -56,7 +75,7 @@ function MoreToggle() {
                 "text-lg text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white",
             )}
         >
-            More <FaChevronDown className="inline-block transition-transform group-hover:rotate-180" />
+            More <MdKeyboardArrowDown className="inline-block transition-transform group-hover:rotate-180 text-xl" />
 
             {/* fake div to maximize hits */}
             <div className={clsx(
@@ -69,43 +88,24 @@ function MoreToggle() {
                     "overflow-hidden",
                     "bg-white border-gray-300 dark:bg-black dark:border-gray-700 rounded-xl border flex flex-col shadow-lg"
                 )}>
-                    {
-                        moreItems.map(({ name, href }, i) =>
-                            <React.Fragment key={href}>
-                                {i > 0 && <hr className="border-gray-300 dark:border-gray-700" />}
-                                <Link
-                                    className={clsx(
-                                        "transition p-3 text-right",
-                                        "text-gray-500 dark:text-gray-400 hover:bg-black/10 hover:dark:bg-white/10 hover:text-black dark:hover:text-white",
-                                        "flex flex-row justify-between items-center gap-3",
-                                    )}
-                                    href={href}
-                                >
-                                    <span>{name}</span>
-                                    <FaChevronRight className="inline-block" />
-                                </Link>
-                            </React.Fragment>)
-                    }
+                    {moreItems.map(({ name, href }, i) =>
+                        <React.Fragment key={href}>
+                            {i > 0 && <hr className="border-gray-300 dark:border-gray-700" />}
+                            <Link
+                                className={clsx(
+                                    "transition p-3 pl-5 text-right",
+                                    "text-gray-500 dark:text-gray-400 hover:bg-black/10 hover:dark:bg-white/10 hover:text-black dark:hover:text-white",
+                                    "flex flex-row justify-between items-center gap-2",
+                                )}
+                                href={href}
+                            >
+                                <span>{name}</span>
+                                <MdKeyboardArrowRight className="inline-block text-xl" />
+                            </Link>
+                        </React.Fragment>
+                    )}
                 </div>
             </div>
         </button>
-    );
-}
-
-export function Nav() {
-    return (
-        <nav className="absolute p-8 pb-4 w-full z-1
-            flex flex-row justify-between">
-            <div>
-                <NavLink href="/" logo>Jerry Zhang</NavLink>
-            </div>
-            <div className="flex gap-8 flex-row">
-                {navItems.map(({ name, href }, i) => (
-                    <NavLink href={href} key={i}>{name}</NavLink>
-                ))}
-                <MoreToggle />
-                <ThemeToggle />
-            </div>
-        </nav>
     );
 }

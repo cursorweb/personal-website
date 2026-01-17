@@ -13,7 +13,7 @@ export default function Projects() {
                 "text-transparent",
                 "bg-clip-text",
                 "bg-radial dark:from-white dark:to-amber-500",
-                "from-amber-900 to-amber-700",
+                "from-amber-900 to-amber-600",
                 "font-bold text-6xl",
                 "text-center",
                 "mb-30 pt-35 pb-5",
