@@ -34,10 +34,10 @@ function SectionCard({ title, href, children }: { title: string, href?: string }
             {children}
             {href ? <Link href={href} className={clsx(
                 "group inline-block",
-                "text-blue-600 hover:text-blue-800 dark:text-blue-500",
+                "text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-500",
                 "rounded p-2 border border-black/10 dark:border-white/10",
                 "transition",
-                "hover:bg-gray-300/80"
+                "hover:bg-gray-300/80 dark:hover:bg-gray-300/20"
             )}>
                 See more
                 <span className="mx-1 group-hover:pl-1.5 transition-all">
@@ -52,7 +52,7 @@ function AboutSection() {
     return (
         <SectionCard title="About">
             <p className="my-5 overflow-hidden">
-                <img src="https://placehold.co/100x100" className="float-left mr-5 relative block" />
+                <img src="/assets/portrait.jpg" className="float-left mr-5 relative block" width={100} />
                 Hey! My name is Junhao Zhang, but you can call me Jerry. I'm a freshman studying Math and Computer Science at the University of Illinois, Urbana-Champaign.
                 My interests include game development, web development, AI, and programming language design.
                 Feel free to reach out! <Link href="/contact" className="link">Contact me</Link>.

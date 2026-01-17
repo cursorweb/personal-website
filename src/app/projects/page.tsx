@@ -94,7 +94,7 @@ export default function Projects() {
                         <div className="relative overflow-hidden">
                             <img src="/assets/vectorgolf.png" className="absolute top-0 left-0 w-full z-1" alt="Vector Golf" />
 
-                            <div className="relative bg-linear-to-b from-transparent to-50% to-white z-2 p-5 pt-65">
+                            <div className="relative bg-linear-to-b from-transparent to-50% to-white dark:to-slate-800 z-2 p-5 pt-65">
                                 <div className="text-2xl">Vector Golf</div>
                                 I love physics, especially creating realistic simulations. So, taking inspiration from GamePigeon Golf, I made my own golf game:
                                 there are ice blocks which break if you hit them, portals that teleport your ball, and so much more!
