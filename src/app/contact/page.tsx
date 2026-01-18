@@ -24,7 +24,7 @@ export default function Contact() {
                 Contact
             </h1>
 
-            <div className="mx-30 flex flex-col md:flex-row gap-20 justify-stretch my-5">
+            <div className="mx-5 md:mx-30 flex flex-col md:flex-row gap-20 justify-stretch my-5">
                 <div className="p-5 flex-1">
                     <div className="font-bold text-3xl mb-5 text-shadow-md">Feel free to get in touch!</div>
                     Whether it's talking about new projects, books, music, or anything else, I'm always excited to meet new people.
@@ -35,7 +35,7 @@ export default function Contact() {
                         <MdEmail className="text-3xl inline-block mr-2" />
                         Email
                     </div>
-                    <div className="flex justify-center gap-10 mb-2 mx-4">
+                    <div className="flex flex-col gap-5 lg:flex-row lg:gap-10 justify-center mb-2 mx-4">
                         <Link
                             href="mailto:jzhang1707@outlook.com"
                             className="flex-1 p-2 bg-gray-500 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-500 text-white transition-colors rounded-full"
