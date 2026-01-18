@@ -35,7 +35,7 @@ export default function Contact() {
                         <MdEmail className="text-3xl inline-block mr-2" />
                         Email
                     </div>
-                    <div className="flex flex-col gap-5 lg:flex-row lg:gap-10 justify-center mb-2 mx-4">
+                    <div className="flex flex-col gap-5 xl:flex-row xl:gap-10 justify-center mb-2 mx-4">
                         <Link
                             href="mailto:jzhang1707@outlook.com"
                             className="flex-1 p-2 bg-gray-500 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-500 text-white transition-colors rounded-full"

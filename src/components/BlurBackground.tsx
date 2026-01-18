@@ -15,7 +15,7 @@ const MAX_SIZE = 500;
 
 export default function BlurBackground({ colors = ["bg-sky-400/80", "bg-purple-700/80"] }: { colors?: string[] }) {
     const divs = Array.from({ length: count }).map((_, i) => {
-        const size = random(MIN_SIZE, MAX_SIZE); // random size
+        const size = random(MIN_SIZE, MAX_SIZE);
         const top = random(-5, 100);
         const left = random(-5, 100);
 
