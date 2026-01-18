@@ -13,7 +13,7 @@ export default function Keys() {
                 onClick={() => input.current?.focus()}
                 className={clsx(
                     "p-5 rounded-xl flex items-center justify-center border-2 relative h-full flex-1",
-                    isFocused ? "bg-blue-300 border-blue-500 dark:bg-slate-700 dark:border-slate-800" : "bg-blue-100 border-blue-400 dark:bg-slate-500 dark:border-slate-400 border-dashed"
+                    isFocused ? "bg-blue-300 border-blue-500 dark:bg-slate-700 dark:border-slate-800" : "bg-blue-100 border-blue-400 dark:bg-slate-500 dark:border-slate-300 border-dashed"
                 )}
             >
                 <input

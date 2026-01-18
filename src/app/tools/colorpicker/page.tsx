@@ -90,6 +90,8 @@ export default function Colorpicker() {
                 onMouseDown={() => { console.log('yes'); sliderPressed.current = true }}
                 width={SIZE}
                 height={SLIDER_HEIGHT} />
+
+            <code>{hue}</code>
         </main>
     );
 }
