@@ -89,16 +89,16 @@ function ProjectSection() {
 function ProjectCard({ img = "https://placehold.co/300x200", defaultColor, title, children }: { img?: string, title: string, defaultColor: string } & React.PropsWithChildren) {
     return (
         <div className="
-            inline-flex flex-col sm:flex-row
+            inline-flex flex-col lg:flex-row
             overflow-hidden
             rounded-xl border border-black/20
             bg-sky-100/30 dark:bg-sky-200/10
             shadow">
             {/* <img src={img} alt={title} /> */}
-            <div className="h-50 sm:h-auto sm:w-[40%]" style={{
+            <div className="h-50 lg:h-auto lg:w-[40%]" style={{
                 background: `url(${img}) no-repeat center / auto 100%, ${defaultColor}`,
             }}></div>
-            <div className="sm:w-[60%] p-5 overflow-auto">
+            <div className="lg:w-[60%] p-5 overflow-auto">
                 <h1 className="text-shadow-2xs font-bold text-lg">{title}</h1>
                 <p className="dark:text-gray-300">{children}</p>
             </div>

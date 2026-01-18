@@ -1,5 +1,4 @@
 "use client";
-
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -23,9 +22,10 @@ export function ThemeToggle() {
     return (
         <button
             onClick={() => setTheme(t => t == "dark" ? "light" : "dark")}
-            className="transition-colors cursor-pointer text-gray-500 dark:text-gray-300 hover:text-black hover:dark:text-white"
+            className="transition-colors cursor-pointer text-gray-500 dark:text-gray-400 hover:text-black hover:dark:text-white"
             aria-label="Change theme">
-            {theme == "dark" ? <FaMoon /> : <MdSunny />}
+            {theme == "dark" ? <FaMoon className="text-4xl md:text-lg inline-block mb-3 md:mb-1" /> : <MdSunny className="text-4xl md:text-lg inline-block mb-3 md:mb-1" />}
+            <span className="text-4xl md:hidden ml-2">{theme == "dark" ? "Dark" : "Light"}</span>
         </button>
     );
 }
