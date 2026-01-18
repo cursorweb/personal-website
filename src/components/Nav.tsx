@@ -50,6 +50,7 @@ export function Nav() {
 function NavLink({ href, logo = false, children }: { href: string, logo?: boolean } & React.PropsWithChildren) {
     const path = usePathname();
     const active = path == href;
+
     return (
         <Link
             href={href}
@@ -75,11 +76,14 @@ function MoreToggle() {
                 "text-lg text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white",
             )}
         >
-            More <MdKeyboardArrowDown className="inline-block transition-transform group-hover:rotate-180 text-xl" />
+            <div className="flex flex-row gap-2 items-center">
+                <span>More</span>
+                <MdKeyboardArrowDown className="inline-block text-xl" />
+            </div>
 
             {/* fake div to maximize hits */}
             <div className={clsx(
-                "transition absolute p-4 pt-2 -right-4",
+                "transition absolute p-4 pt-2 -right-7",
                 "opacity-0 -translate-y-1 pointer-events-none",
                 "group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto",
             )}>
@@ -95,7 +99,7 @@ function MoreToggle() {
                                 className={clsx(
                                     "transition p-3 pl-5 text-right",
                                     "text-gray-500 dark:text-gray-400 hover:bg-black/10 hover:dark:bg-white/10 hover:text-black dark:hover:text-white",
-                                    "flex flex-row justify-between items-center gap-2",
+                                    "flex flex-row justify-end items-center gap-2",
                                 )}
                                 href={href}
                             >
