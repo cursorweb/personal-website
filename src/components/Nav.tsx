@@ -41,7 +41,7 @@ export function Nav() {
             navOpen ? "fixed" : "absolute",
             "md:h-auto md:bg-transparent md:absolute",
             "z-10 p-8 pb-4 w-full",
-            "flex flex-col md:flex-row md:justify-between",
+            "flex flex-col items-start md:flex-row md:justify-between",
         )}>
             <div className="z-2">
                 <NavLink href="/" logo>Jerry Zhang</NavLink>
@@ -77,9 +77,9 @@ export function Nav() {
 
             <div className={clsx(
                 "z-1",
-                "transition-transform absolute top-0 left-0 p-5 h-screen w-full",
+                "transition absolute top-0 left-0 p-5 h-screen w-full",
                 "flex flex-col",
-                !navOpen && "-translate-y-full",
+                !navOpen && "-translate-y-full opacity-0",
                 "md:hidden dark:bg-black bg-white",
             )}>
                 <div className="flex gap-8 flex-col justify-center items-start h-full">
