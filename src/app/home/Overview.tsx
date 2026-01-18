@@ -107,8 +107,9 @@ function BlogSection() {
 
 function ToolSection() {
     return (
-        <SectionCard title="Tools">
-            <p className="my-5">What's a personal website without functionality?</p>
+        <SectionCard title="Tools" href="/tools">
+            <p className="mt-5">What's a personal website without functionality?</p>
+            <p className="mb-5">Try out the <Link href="/tools/keys" className="link">keyboard event tool</Link> and the <Link href="/tools/colorpicker" className="link">colorpicker</Link>.</p>
         </SectionCard>
     );
 }

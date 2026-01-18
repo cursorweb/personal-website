@@ -1,3 +1,4 @@
+/* this page is currently unused!! */
 import BlurBackground from "@/components/BlurBackground"
 import { serif } from "../fonts";
 import { clsx } from "clsx";
