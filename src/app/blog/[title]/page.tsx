@@ -2,8 +2,7 @@ import { paths, getBlog, getSurroundingBlogs } from "@/lib/posts";
 
 import Link from "next/link";
 import { serif } from "@/app/fonts";
-import { MdArrowBack, MdArrowForward, MdArrowLeft, MdChevronLeft } from "react-icons/md";
-import { FaArrowLeft, FaChevronLeft } from "react-icons/fa";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
 export async function generateStaticParams() {
     return paths.map(title => ({ title }));
@@ -36,7 +35,7 @@ export default async function Post(props: { params: Promise<{ title: string }> }
                     className="
                 max-w-full
                 prose dark:prose-invert
-                prose-a:text-blue-600 prose-a:hover:no-underline prose-a:hover:text-blue-800 prose-a:dark:text-blue-500 prose-a:dark:hover:text-blue-700
+                prose-a:text-blue-600 prose-a:hover:no-underline prose-a:hover:text-blue-800 prose-a:dark:text-blue-400 prose-a:dark:hover:text-blue-600
                 prose-blockquote:not-italic prose-blockquote:font-normal
                 prose-blockquote:[&>p]:first-of-type:before:content-none prose-blockquote:[&>p]:last-of-type:after:content-none"
                     dangerouslySetInnerHTML={{ __html: blog.html }}
