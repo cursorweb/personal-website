@@ -1,12 +1,16 @@
-import { Nav } from "@/components/nav/nav";
+import { Nav } from "@/components/Nav";
 import "./globals.css";
-import { Noto_Sans } from "next/font/google";
+import { Providers } from "./providers";
+import { Metadata } from "next";
 
-const noto = Noto_Sans({ subsets: ["latin"], weight: "400" });
-
-export const metadata = {
-    title: "Coder100",
-    description: "The personal website of Coder100",
+export const metadata: Metadata = {
+    title: "Jerry Zhang",
+    description: "Hello! I am Jerry Zhang, a freshman at University of Illinois, Urbana-Champaign majoring in Math and Computer Science.",
+    openGraph: {
+        title: "Jerry Zhang",
+        description: "Math & Computer Science Major at University of Illinois, Urbana-Champaign.",
+        siteName: "Jerry Zhang",
+    },
 };
 
 export default function RootLayout({
@@ -15,10 +19,12 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
-            <body className={noto.className}>
-                <Nav />
-                {children}
+        <html lang="en" suppressHydrationWarning>
+            <body className="selection:bg-sky-600/30 dark:selection:bg-purple-500/30">
+                <Providers>
+                    <Nav />
+                    {children}
+                </Providers>
             </body>
         </html>
     );

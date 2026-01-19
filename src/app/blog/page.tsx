@@ -1,39 +1,22 @@
+import { getBlog, getBlogs } from "@/lib/posts";
+import { serif } from "../fonts";
+import { Card } from "@/components/Card";
 import Link from "next/link";
 
-import { Card, CardTitle } from "@/components/card/card";
-import { Layout } from "@/components/blog/layout";
-
-
-import { getBlogs } from "@/lib/posts";
-import styles from "./styles.module.css";
-
-
-export const metadata = {
-    title: "Coder100's Blog",
-    description: "The blog of Coder100",
-};
-
-
-export default function Home() {
+export default function Blog() {
     const blogs = getBlogs();
 
     return (
-        <>
-            <Layout path="/blog">
-                <div className={styles.title}>Coder100&apos;s Blog</div>
-                <p>Welcome to my blog! Click around and read my blog posts! I&apos;m an avid coder, youtuber, and a musician. Happy reading!</p>
-                {blogs.map(({ url, title, bio, date }, i) => (
-                    <Card key={i}>
-                        <CardTitle>
-                            <Link href={`/blog/${url}`}>
-                                {title}
-                            </Link>
-                        </CardTitle>
-                        <div className={styles.smallSub}>{new Date(date).toDateString()}</div>
-                        <div>{bio}</div>
-                    </Card>
-                ))}
-            </Layout>
-        </>
+        <div className="pt-30 md:px-50 p-10">
+            <h1 className={`${serif.className} font-bold text-4xl my-6`}>Blog</h1>
+            <p>Welcome to my blog! I mainly write about my coding experiences and new ideas I have.</p>
+            {blogs.map(({ url, title, bio, date }, i) => (
+                <Card key={i} className="my-3">
+                    <h1 className="font-bold text-2xl hover:text-stone-700 dark:hover:text-stone-300 hover:underline"><Link href={`/blog/${url}`}>{title}</Link></h1>
+                    <div className="text-sm dark:text-gray-400 text-gray-600 mb-3">{new Date(date).toDateString()}</div>
+                    <div>{bio}</div>
+                </Card>
+            ))}
+        </div>
     );
 }

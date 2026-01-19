@@ -1,57 +1,30 @@
-:root {
-  --background: #1f212e;
-  --background-accent: #35384b;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
-  --primary: #d6c76f;
-  --primaryh: #a99c53;
-  
-  --secondary: #0095ff;
-  --secondaryh: #7cc9ff;
+@custom-variant dark (&:where(.dark, .dark *));
 
-  --text: #d7ddec;
+@theme inline {
+    --color-glass: rgb(255 255 255 / 70%);
+    --color-glass-dark: color-mix(in oklch, var(--color-stone-800) 70%, transparent);
 }
 
-html, body {
-  padding: 0;
-  margin: 0;
-
-  background: var(--background);
-  color: var(--text);
-
-  scroll-behavior: smooth;
+.link {
+    color: var(--color-blue-600);
+    border-bottom: 2px solid var(--color-blue-600);
+    transition: all 0.2s;
 }
 
-a {
-  color: var(--primary);
-  text-decoration: underline;
-  cursor: pointer;
+.link:hover {
+    color: var(--color-blue-800);
+    border-bottom: 2px solid transparent;
 }
 
-a:hover {
-  text-decoration: none;
-  color: var(--primaryh);
+.dark.link {
+    color: var(--color-blue-500);
+    border-bottom: 2px solid var(--color-blue-500);
 }
 
-code {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px;
-  border-radius: 8px;
-  display: inline;
+.dark.link:hover {
+    color: var(--color-blue-700);
+    border-bottom: 2px solid transparent;
 }
-
-pre code {
-  display: block;
-  padding: 10px;
-}
-
-
-::selection {
-  color: white;
-  background: var(--primaryh);
-}
-
-::-moz-selection {
-  color: white;
-  background: var(--primaryh);
-}
-
