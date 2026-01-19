@@ -113,7 +113,7 @@ function BlogSection() {
         <SectionCard title="Blog" href="/blog">
             <p className="my-5">I have a blog where I write about my coding experiences and any new ideas I have. Check out the latest blog post.</p>
             <h1 className="text-lg font-bold">{title}</h1>
-            <p className="mb-5">{bio} <Link href={url} className="link">Read more</Link>.</p>
+            <p className="mb-5">{bio} <Link href={`/blog/${url}`} className="link">Read more</Link>.</p>
         </SectionCard>
     );
 }
