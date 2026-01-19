@@ -1,7 +1,0 @@
-@import "tailwindcss";
-
-@layer base {
-    a {
-        @apply text-blue-600 border-b-2 border-b-blue-600 transition hover:text-blue-800 hover:border-b-transparent dark:text-blue-500 dark:border-b-blue-500
-    }
-}
