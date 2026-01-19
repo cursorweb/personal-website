@@ -121,14 +121,37 @@ function NavLink({ href, logo = false, children }: { href: string, logo?: boolea
 }
 
 function MoreToggle() {
+    const [open, setOpen] = useState(false);
+    const pathname = usePathname();
+
+    useEffect(() => {
+        setOpen(false);
+    }, [pathname]);
+
+    useEffect(() => {
+        function handler() {
+            setOpen(false);
+        }
+
+        window.addEventListener("touchend", handler, false);
+
+        return () => {
+            window.removeEventListener("touchend", handler);
+        };
+    }, []);
+
     return (
         <button
             className={clsx(
                 "cursor-pointer transition group relative",
                 "text-lg text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white",
             )}
+            onTouchEnd={e => e.stopPropagation()}
         >
-            <div className="flex flex-row gap-2 items-center">
+            <div
+                className="flex flex-row gap-2 items-center"
+                onTouchEnd={() => setOpen(x => !x)}
+            >
                 <span>More</span>
                 <MdKeyboardArrowDown className="inline-block text-xl" />
             </div>
@@ -136,9 +159,10 @@ function MoreToggle() {
             {/* fake div to maximize hits */}
             <div className={clsx(
                 "transition absolute p-4 pt-2 -right-7",
-                "opacity-0 -translate-y-1 pointer-events-none",
                 "group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto",
-                "group-focus:opacity-100 group-focus:translate-y-0 group-focus:pointer-events-auto",
+                open
+                    ? "opacity-100 translate-y-0 pointer-events-auto"
+                    : "opacity-0 -translate-y-1 pointer-events-none",
             )}>
                 {/* actual nav */}
                 <div className={clsx(
