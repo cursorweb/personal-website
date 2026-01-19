@@ -58,19 +58,19 @@ export function Nav() {
 
             {/* mobile nav */}
             <div
-                className="md:hidden absolute right-8 top-8 cursor-pointer w-10 h-10 group z-2"
+                className="md:hidden absolute right-8 top-8 cursor-pointer w-8 h-8 group z-2"
                 onClick={() => setNavOpen(x => !x)}
             >
                 <span className={clsx(
-                    "transition absolute right-0 w-10 h-1 bg-black dark:bg-white",
+                    "transition absolute right-0 w-8 h-0.5 bg-black dark:bg-white",
                     navOpen ? "top-4 rotate-45" : "top-1"
                 )}></span>
                 <span className={clsx(
-                    "transition absolute right-0 w-10 h-1 top-4 bg-black dark:bg-white",
+                    "transition absolute right-0 w-8 h-0.5 top-4 bg-black dark:bg-white",
                     navOpen ? "opacity-0" : "opacity-100"
                 )}></span>
                 <span className={clsx(
-                    "transition absolute right-0 w-10 h-1 bg-black dark:bg-white",
+                    "transition absolute right-0 w-8 h-0.5 bg-black dark:bg-white",
                     navOpen ? "top-4 -rotate-45" : "top-7"
                 )}></span>
             </div>
@@ -138,6 +138,7 @@ function MoreToggle() {
                 "transition absolute p-4 pt-2 -right-7",
                 "opacity-0 -translate-y-1 pointer-events-none",
                 "group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto",
+                "group-focus:opacity-100 group-focus:translate-y-0 group-focus:pointer-events-auto",
             )}>
                 {/* actual nav */}
                 <div className={clsx(

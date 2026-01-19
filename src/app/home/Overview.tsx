@@ -6,6 +6,7 @@ import { serif } from "../fonts";
 import Link from "next/link";
 import clsx from "clsx";
 import { Card } from "@/components/Card";
+import { getBlogs } from "@/lib/posts";
 
 
 export function Overview() {
@@ -107,10 +108,12 @@ function ProjectCard({ img = "https://placehold.co/300x200", defaultColor, title
 }
 
 function BlogSection() {
+    const { bio, title, url } = getBlogs()[0];
     return (
         <SectionCard title="Blog" href="/blog">
-            <p className="my-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, suscipit ut. Esse voluptates labore corrupti quibusdam beatae eum odit laboriosam saepe inventore officiis voluptas, eius molestias nulla quasi dignissimos asperiores.</p>
-            <p className="my-5">I write in my blog</p>
+            <p className="my-5">I have a blog where I write about my coding experiences and any new ideas I have. Check out the latest blog post.</p>
+            <h1 className="text-lg font-bold">{title}</h1>
+            <p className="mb-5">{bio} <Link href={url} className="link">Read more</Link>.</p>
         </SectionCard>
     );
 }
@@ -118,7 +121,7 @@ function BlogSection() {
 function ToolSection() {
     return (
         <SectionCard title="Tools" href="/tools">
-            <p className="mt-5">What's a personal website without functionality?</p>
+            <p className="mt-5">I have some useful tools that I use all the time in development.</p>
             <p className="mb-5">Try out the <Link href="/tools/keys" className="link">keyboard event tool</Link> and the <Link href="/tools/colorpicker" className="link">colorpicker</Link>.</p>
         </SectionCard>
     );
