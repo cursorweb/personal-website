@@ -29,7 +29,7 @@ const moreItems: { name: string, href: string }[] = [
 ];
 
 export function Nav() {
-    const [navOpen, setNavOpen] = useState(true);
+    const [navOpen, setNavOpen] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
