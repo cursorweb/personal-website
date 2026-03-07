@@ -23,17 +23,18 @@ export default function Colorpicker() {
 
     function drawColor(canvas: HTMLCanvasElement, hue: number) {
         const ctx = canvas.getContext("2d")!;
+        const { width, height } = canvas;
 
-        const imageData = ctx.createImageData(SIZE, SIZE);
+        const imageData = ctx.createImageData(width, height);
         const data = imageData.data;
 
-        for (let y = 0; y < SIZE; y++) {
-            for (let x = 0; x < SIZE; x++) {
-                const s = x / (SIZE - 1);
-                const v = (SIZE - 1 - y) / (SIZE - 1);
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const s = x / (width - 1);
+                const v = (height - 1 - y) / (height - 1);
 
                 const [r, g, b] = hsvtorgb(hue, s, v);
-                const index = (y * SIZE + x) * 4;
+                const index = (y * width + x) * 4;
                 data[index] = r;
                 data[index + 1] = g;
                 data[index + 2] = b;
@@ -46,14 +47,15 @@ export default function Colorpicker() {
         ctx.strokeStyle = "white";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(sat * (SIZE - 1), (1 - val) * (SIZE - 1), 3, 0, 2 * Math.PI);
+        ctx.arc(sat * (width - 1), (1 - val) * (height - 1), 3, 0, 2 * Math.PI);
         ctx.stroke();
     }
 
     function drawSlider(canvas: HTMLCanvasElement, hue: number) {
         const ctx = canvas.getContext("2d")!;
+        const { width, height } = canvas;
 
-        const gradient = ctx.createLinearGradient(0, 0, 2 * SIZE, 0);
+        const gradient = ctx.createLinearGradient(0, 0, width, 0);
 
         for (let i = 0; i <= 6; i++) {
             const h = (i * 60) % 360;
@@ -61,27 +63,27 @@ export default function Colorpicker() {
         }
 
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 2 * SIZE, SLIDER_HEIGHT);
+        ctx.fillRect(0, 0, width, height);
 
         ctx.strokeStyle = "white";
         ctx.lineWidth = 2;
-        ctx.strokeRect((hue * 2 * SIZE) - 2.5, 0, 5, SLIDER_HEIGHT);
+        ctx.strokeRect((hue * width) - 2.5, 0, 5, height);
     }
 
     function changeHue(e: React.PointerEvent<HTMLCanvasElement>) {
         if (!sliderPressed.current) return;
-        const xStart = sliderCanvasRef.current!.getBoundingClientRect().x;
-        const offset = Math.max(Math.min(e.clientX - xStart, 2 * SIZE), 0);
-        setHue(offset / (2 * SIZE));
+        const rect = sliderCanvasRef.current!.getBoundingClientRect();
+        const offset = Math.max(Math.min(e.clientX - rect.x, rect.width), 0);
+        setHue(offset / rect.width);
     }
 
     function changeSV(e: React.PointerEvent<HTMLCanvasElement>) {
         if (!colorPressed.current) return;
         const rect = colorCanvasRef.current!.getBoundingClientRect();
-        const x = Math.max(Math.min(e.clientX - rect.x, SIZE), 0);
-        const y = Math.max(Math.min(e.clientY - rect.y, SIZE), 0);
-        setSat(x / SIZE);
-        setVal(1 - y / SIZE);
+        const x = Math.max(Math.min(e.clientX - rect.x, rect.width), 0);
+        const y = Math.max(Math.min(e.clientY - rect.y, rect.height), 0);
+        setSat(x / rect.width);
+        setVal(1 - y / rect.height);
     }
 
     function colorInputChange(value: string, target: HTMLInputElement, originalVal: string) {
@@ -130,13 +132,12 @@ export default function Colorpicker() {
     return (
         <main>
             <div className="flex flex-row justify-center">
-                <div>
+                <div className="p-3 border border-black/30 rounded-xl bg-white/50 dark:bg-black/40">
                     <div className="flex flex-row mb-2">
-                        <div style={{
-                            backgroundColor: css.rgb,
-                            width: SIZE,
-                            height: SIZE
-                        }}></div>
+                        <div
+                            style={{ backgroundColor: css.rgb }}
+                            className="flex-1 self-stretch"
+                        ></div>
 
                         <canvas
                             ref={colorCanvasRef}
@@ -146,8 +147,8 @@ export default function Colorpicker() {
                                 colorPressed.current = true;
                                 changeSV(e);
                             }}
-                            width={SIZE}
-                            height={SIZE} />
+                            height={SIZE}
+                            className="flex-2" />
                     </div>
 
                     <canvas
@@ -163,7 +164,7 @@ export default function Colorpicker() {
                 </div>
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-1">
                 <div className="inline-grid grid-cols-2">
                     <ColorInput ref={rgbInputRef} defaultValue={css.rgb} onChange={(v, t) => colorInputChange(v, t, css.rgb)} color={css.rgb} />
                     <ColorInput ref={rgbCommaInputRef} defaultValue={css.rgbComma} onChange={(v, t) => colorInputChange(`rgb(${v})`, t, css.rgbComma)} color={css.rgb} />
@@ -193,13 +194,13 @@ function ColorInput({ ref, defaultValue, onChange, color }: {
     }
 
     return (
-        <div className="relative inline-block m-2">
+        <div className="relative m-1">
             <input
                 ref={ref}
                 defaultValue={defaultValue}
                 onBlur={e => onChange(e.target.value, e.target)}
                 onKeyDown={e => e.key == "Enter" && onChange(e.currentTarget.value, e.currentTarget)}
-                className="p-2 dark:bg-black/50 border border-black/15 rounded-xl pr-8 outline-0 focus:ring-2 font-mono"
+                className="w-full p-2 dark:bg-black/40 bg-white/30 border border-black/15 rounded-lg pr-8 outline-0 focus:ring-2 font-mono"
                 style={{ "--tw-ring-color": color } as React.CSSProperties}
                 autoComplete="off"
                 autoCorrect="off"
