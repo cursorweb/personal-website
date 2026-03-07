@@ -9,8 +9,11 @@ export default function Colorpicker() {
     const sliderCanvasRef = useRef<HTMLCanvasElement>(null);
 
     const [hue, setHue] = useState(0);
+    const [sat, setSat] = useState(1);
+    const [val, setVal] = useState(1);
 
     const sliderPressed = useRef(false);
+    const colorPressed = useRef(false);
 
     function drawColor(canvas: HTMLCanvasElement, hue: number) {
         const ctx = canvas.getContext("2d")!;
@@ -33,6 +36,12 @@ export default function Colorpicker() {
         }
 
         ctx.putImageData(imageData, 0, 0);
+
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(sat * SIZE, (1 - val) * SIZE, 3, 0, 2 * Math.PI);
+        ctx.stroke();
     }
 
     function drawSlider(canvas: HTMLCanvasElement, hue: number) {
@@ -48,16 +57,25 @@ export default function Colorpicker() {
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, SIZE, SLIDER_HEIGHT);
 
-        ctx.strokeStyle = "1px white";
-        ctx.strokeRect((hue * SIZE) - 1, 0, 2, SLIDER_HEIGHT);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect((hue * SIZE) - 2.5, 0, 5, SLIDER_HEIGHT);
     }
 
-    function changeHue(e: React.MouseEvent<HTMLCanvasElement>) {
-        console.log('called');
+    function changeHue(e: React.PointerEvent<HTMLCanvasElement>) {
         if (!sliderPressed.current) return;
         const xStart = sliderCanvasRef.current!.getBoundingClientRect().x;
-        const offset = e.clientX - xStart;
+        const offset = Math.max(Math.min(e.clientX - xStart, SIZE), 0);
         setHue(offset / SIZE);
+    }
+
+    function changeSV(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (!colorPressed.current) return;
+        const rect = colorCanvasRef.current!.getBoundingClientRect();
+        const x = Math.max(Math.min(e.clientX - rect.x, SIZE), 0);
+        const y = Math.max(Math.min(e.clientY - rect.y, SIZE), 0);
+        setSat(x / SIZE);
+        setVal(1 - y / SIZE);
     }
 
     useEffect(() => {
@@ -65,33 +83,70 @@ export default function Colorpicker() {
         if (!sliderCanvasRef.current) return;
         drawColor(colorCanvasRef.current, hue);
         drawSlider(sliderCanvasRef.current, hue);
-    }, [hue]);
+    }, [hue, sat, val]);
 
     useEffect(() => {
         function handler() {
             sliderPressed.current = false;
+            colorPressed.current = false;
         }
-        window.addEventListener("mouseup", handler);
+
+        window.addEventListener("pointerup", handler);
         return () => {
-            window.removeEventListener("mouseup", handler);
+            window.removeEventListener("pointerup", handler);
         }
     }, []);
 
+    const [r, g, b] = hsvtorgb(hue, sat, val);
+    const hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+    const l = val * (1 - sat / 2);
+    const hslS = l === 0 || l === 1 ? 0 : (val - l) / Math.min(l, 1 - l);
+    const css = {
+        rgb: `rgb(${r}, ${g}, ${b})`,
+        rgbComma: `${r}, ${g}, ${b}`,
+        hex,
+        hsl: `hsl(${Math.round(hue * 360)}, ${Math.round(hslS * 100)}%, ${Math.round(l * 100)}%)`,
+    };
+
     return (
         <main>
-            <canvas
-                ref={colorCanvasRef}
-                width={SIZE}
-                height={SIZE} />
+            <div className="flex flex-row justify-center">
+                <div style={{
+                    backgroundColor: css.rgb,
+                    width: SIZE,
+                    height: SIZE
+                }}></div>
+                <div>
+                    <canvas
+                        ref={colorCanvasRef}
+                        onPointerMove={changeSV}
+                        onPointerDown={e => {
+                            e.currentTarget.setPointerCapture(e.pointerId);
+                            colorPressed.current = true;
+                            changeSV(e);
+                        }}
+                        width={SIZE}
+                        height={SIZE} />
 
-            <canvas
-                ref={sliderCanvasRef}
-                onPointerMove={changeHue}
-                onMouseDown={() => { console.log('yes'); sliderPressed.current = true }}
-                width={SIZE}
-                height={SLIDER_HEIGHT} />
+                    <canvas
+                        ref={sliderCanvasRef}
+                        onPointerMove={changeHue}
+                        onPointerDown={e => {
+                            e.currentTarget.setPointerCapture(e.pointerId);
+                            sliderPressed.current = true;
+                            changeHue(e);
+                        }}
+                        width={SIZE}
+                        height={SLIDER_HEIGHT} />
+                </div>
+            </div>
 
-            <code>{hue}</code>
+            <code>
+                <div>{css.rgb}</div>
+                <div>{css.rgbComma}</div>
+                <div>{css.hex}</div>
+                <div>{css.hsl}</div>
+            </code>
         </main>
     );
 }
