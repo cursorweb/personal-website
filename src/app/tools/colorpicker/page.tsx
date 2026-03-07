@@ -1,8 +1,34 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { MdOutlineContentCopy, MdCheck } from "react-icons/md";
 
 const SIZE = 200;
 const SLIDER_HEIGHT = 20;
+
+function ColorInput({ ref, defaultValue, onChange }: {
+    ref: React.RefObject<HTMLInputElement | null>;
+    defaultValue: string;
+    onChange: (value: string, target: HTMLInputElement) => void;
+}) {
+    const [copied, setCopied] = useState(false);
+
+    function copy() {
+        navigator.clipboard.writeText(ref.current?.value ?? "");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1000);
+    }
+
+    return (
+        <div>
+            <input
+                ref={ref}
+                defaultValue={defaultValue}
+                onBlur={e => onChange(e.target.value, e.target)}
+                onKeyDown={e => e.key == "Enter" && onChange(e.currentTarget.value, e.currentTarget)} />
+            <button onClick={copy}>{copied ? <MdCheck /> : <MdOutlineContentCopy />}</button>
+        </div>
+    );
+}
 
 export default function Colorpicker() {
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -14,6 +40,11 @@ export default function Colorpicker() {
 
     const sliderPressed = useRef(false);
     const colorPressed = useRef(false);
+
+    const rgbInputRef = useRef<HTMLInputElement>(null);
+    const rgbCommaInputRef = useRef<HTMLInputElement>(null);
+    const hexInputRef = useRef<HTMLInputElement>(null);
+    const hslInputRef = useRef<HTMLInputElement>(null);
 
     function drawColor(canvas: HTMLCanvasElement, hue: number) {
         const ctx = canvas.getContext("2d")!;
@@ -78,13 +109,21 @@ export default function Colorpicker() {
         setVal(1 - y / SIZE);
     }
 
-    useEffect(() => {
-        if (!colorCanvasRef.current) return;
-        if (!sliderCanvasRef.current) return;
-        drawColor(colorCanvasRef.current, hue);
-        drawSlider(sliderCanvasRef.current, hue);
-    }, [hue, sat, val]);
+    function colorInputChange(value: string, target: HTMLInputElement, originalVal: string) {
+        const parsed = parseCSSColor(value);
+        if (!parsed) {
+            target.value = originalVal;
+            return;
+        }
 
+        const [h, s, v] = rgbtohsv(...parsed);
+
+        setHue(h);
+        setSat(s);
+        setVal(v);
+    }
+
+    // pointer handlers
     useEffect(() => {
         function handler() {
             sliderPressed.current = false;
@@ -97,16 +136,23 @@ export default function Colorpicker() {
         }
     }, []);
 
-    const [r, g, b] = hsvtorgb(hue, sat, val);
-    const hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
-    const l = val * (1 - sat / 2);
-    const hslS = l === 0 || l === 1 ? 0 : (val - l) / Math.min(l, 1 - l);
-    const css = {
-        rgb: `rgb(${r}, ${g}, ${b})`,
-        rgbComma: `${r}, ${g}, ${b}`,
-        hex,
-        hsl: `hsl(${Math.round(hue * 360)}, ${Math.round(hslS * 100)}%, ${Math.round(l * 100)}%)`,
-    };
+    // when the user picks a color
+    useEffect(() => {
+        if (!colorCanvasRef.current || !sliderCanvasRef.current) return;
+        drawColor(colorCanvasRef.current, hue);
+        drawSlider(sliderCanvasRef.current, hue);
+
+        // uncontrolled input, so we have to manually set it
+        // this is a performance gain at tradeoff of manual input management
+        const css = hsvtocss(hue, sat, val);
+
+        if (rgbInputRef.current) rgbInputRef.current.value = css.rgb;
+        if (rgbCommaInputRef.current) rgbCommaInputRef.current.value = css.rgbComma;
+        if (hexInputRef.current) hexInputRef.current.value = css.hex;
+        if (hslInputRef.current) hslInputRef.current.value = css.hsl;
+    }, [hue, sat, val]);
+
+    const css = hsvtocss(hue, sat, val);
 
     return (
         <main>
@@ -142,10 +188,10 @@ export default function Colorpicker() {
             </div>
 
             <code>
-                <div>{css.rgb}</div>
-                <div>{css.rgbComma}</div>
-                <div>{css.hex}</div>
-                <div>{css.hsl}</div>
+                <ColorInput ref={rgbInputRef} defaultValue={css.rgb} onChange={(v, t) => colorInputChange(v, t, css.rgb)} />
+                <ColorInput ref={rgbCommaInputRef} defaultValue={css.rgbComma} onChange={(v, t) => colorInputChange(`rgb(${v})`, t, css.rgbComma)} />
+                <ColorInput ref={hexInputRef} defaultValue={css.hex} onChange={(v, t) => colorInputChange(v, t, css.hex)} />
+                <ColorInput ref={hslInputRef} defaultValue={css.hsl} onChange={(v, t) => colorInputChange(v, t, css.hsl)} />
             </code>
         </main>
     );
@@ -154,7 +200,7 @@ export default function Colorpicker() {
 /**
  * Range from [0-1] source https://stackoverflow.com/a/17243070/13759058
  */
-function hsvtorgb(h: number, s: number, v: number) {
+function hsvtorgb(h: number, s: number, v: number): [number, number, number] {
     let r = 0, g = 0, b = 0;
 
     let i = Math.floor(h * 6);
@@ -175,4 +221,75 @@ function hsvtorgb(h: number, s: number, v: number) {
         Math.round(g * 255),
         Math.round(b * 255)
     ];
+}
+
+function rgbtohsv(r: number, g: number, b: number): [number, number, number] {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const d = max - min;
+    let h = 0;
+    const s = max == 0 ? 0 : d / max;
+    const v = max;
+    if (max !== min) {
+        switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+    return [h, s, v];
+}
+
+function hsvtohsl(h: number, s: number, v: number): [number, number, number] {
+    const l = v * (1 - s / 2);
+    const hslS = l == 0 || l == 1 ? 0 : (v - l) / Math.min(l, 1 - l);
+    return [h, hslS, l];
+}
+
+function hsvtocss(h: number, s: number, v: number) {
+    const [r, g, b] = hsvtorgb(h, s, v);
+    const hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+    const [hslH, hslS, hslL] = hsvtohsl(h, s, v);
+    return {
+        rgb: `rgb(${r}, ${g}, ${b})`,
+        rgbComma: `${r}, ${g}, ${b}`,
+        hex,
+        hsl: `hsl(${Math.round(hslH * 360)}, ${Math.round(hslS * 100)}%, ${Math.round(hslL * 100)}%)`,
+    };
+}
+
+/**
+ * Parses any valid CSS color string and returns [r, g, b] in 0-255 range.
+ */
+function parseCSSColor(input: string): [number, number, number] | null {
+    const ctx = document.createElement("canvas").getContext("2d")!;
+
+    // Two sentinels in case it is exactly the color
+    for (const sentinel of ["#fe9ac8", "#12d45e"]) {
+        ctx.fillStyle = sentinel;
+        ctx.fillStyle = input;
+
+        // ctx.fillStyle won't do anything if it wasn't a valid value
+        if (ctx.fillStyle != sentinel) {
+            const normalized = ctx.fillStyle;
+
+            // might be hex value
+            if (normalized.startsWith("#") && normalized.length == 7) {
+                return [
+                    parseInt(normalized.slice(1, 3), 16),
+                    parseInt(normalized.slice(3, 5), 16),
+                    parseInt(normalized.slice(5, 7), 16),
+                ];
+            }
+
+            // might be rgb value
+            const m = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(normalized);
+            if (m) return [Number(m[1]), Number(m[2]), Number(m[3])];
+
+            return null;
+        }
+    }
+
+    return null;
 }
