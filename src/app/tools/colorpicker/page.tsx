@@ -5,31 +5,6 @@ import { MdOutlineContentCopy, MdCheck } from "react-icons/md";
 const SIZE = 200;
 const SLIDER_HEIGHT = 20;
 
-function ColorInput({ ref, defaultValue, onChange }: {
-    ref: React.RefObject<HTMLInputElement | null>;
-    defaultValue: string;
-    onChange: (value: string, target: HTMLInputElement) => void;
-}) {
-    const [copied, setCopied] = useState(false);
-
-    function copy() {
-        navigator.clipboard.writeText(ref.current?.value ?? "");
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1000);
-    }
-
-    return (
-        <div>
-            <input
-                ref={ref}
-                defaultValue={defaultValue}
-                onBlur={e => onChange(e.target.value, e.target)}
-                onKeyDown={e => e.key == "Enter" && onChange(e.currentTarget.value, e.currentTarget)} />
-            <button onClick={copy}>{copied ? <MdCheck /> : <MdOutlineContentCopy />}</button>
-        </div>
-    );
-}
-
 export default function Colorpicker() {
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
     const sliderCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -71,14 +46,14 @@ export default function Colorpicker() {
         ctx.strokeStyle = "white";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(sat * SIZE, (1 - val) * SIZE, 3, 0, 2 * Math.PI);
+        ctx.arc(sat * (SIZE - 1), (1 - val) * (SIZE - 1), 3, 0, 2 * Math.PI);
         ctx.stroke();
     }
 
     function drawSlider(canvas: HTMLCanvasElement, hue: number) {
         const ctx = canvas.getContext("2d")!;
 
-        const gradient = ctx.createLinearGradient(0, 0, SIZE, 0);
+        const gradient = ctx.createLinearGradient(0, 0, 2 * SIZE, 0);
 
         for (let i = 0; i <= 6; i++) {
             const h = (i * 60) % 360;
@@ -86,18 +61,18 @@ export default function Colorpicker() {
         }
 
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, SIZE, SLIDER_HEIGHT);
+        ctx.fillRect(0, 0, 2 * SIZE, SLIDER_HEIGHT);
 
         ctx.strokeStyle = "white";
         ctx.lineWidth = 2;
-        ctx.strokeRect((hue * SIZE) - 2.5, 0, 5, SLIDER_HEIGHT);
+        ctx.strokeRect((hue * 2 * SIZE) - 2.5, 0, 5, SLIDER_HEIGHT);
     }
 
     function changeHue(e: React.PointerEvent<HTMLCanvasElement>) {
         if (!sliderPressed.current) return;
         const xStart = sliderCanvasRef.current!.getBoundingClientRect().x;
-        const offset = Math.max(Math.min(e.clientX - xStart, SIZE), 0);
-        setHue(offset / SIZE);
+        const offset = Math.max(Math.min(e.clientX - xStart, 2 * SIZE), 0);
+        setHue(offset / (2 * SIZE));
     }
 
     function changeSV(e: React.PointerEvent<HTMLCanvasElement>) {
@@ -136,6 +111,8 @@ export default function Colorpicker() {
         }
     }, []);
 
+    const css = hsvtocss(hue, sat, val);
+
     // when the user picks a color
     useEffect(() => {
         if (!colorCanvasRef.current || !sliderCanvasRef.current) return;
@@ -144,35 +121,34 @@ export default function Colorpicker() {
 
         // uncontrolled input, so we have to manually set it
         // this is a performance gain at tradeoff of manual input management
-        const css = hsvtocss(hue, sat, val);
-
         if (rgbInputRef.current) rgbInputRef.current.value = css.rgb;
         if (rgbCommaInputRef.current) rgbCommaInputRef.current.value = css.rgbComma;
         if (hexInputRef.current) hexInputRef.current.value = css.hex;
         if (hslInputRef.current) hslInputRef.current.value = css.hsl;
     }, [hue, sat, val]);
 
-    const css = hsvtocss(hue, sat, val);
-
     return (
         <main>
             <div className="flex flex-row justify-center">
-                <div style={{
-                    backgroundColor: css.rgb,
-                    width: SIZE,
-                    height: SIZE
-                }}></div>
                 <div>
-                    <canvas
-                        ref={colorCanvasRef}
-                        onPointerMove={changeSV}
-                        onPointerDown={e => {
-                            e.currentTarget.setPointerCapture(e.pointerId);
-                            colorPressed.current = true;
-                            changeSV(e);
-                        }}
-                        width={SIZE}
-                        height={SIZE} />
+                    <div className="flex flex-row mb-2">
+                        <div style={{
+                            backgroundColor: css.rgb,
+                            width: SIZE,
+                            height: SIZE
+                        }}></div>
+
+                        <canvas
+                            ref={colorCanvasRef}
+                            onPointerMove={changeSV}
+                            onPointerDown={e => {
+                                e.currentTarget.setPointerCapture(e.pointerId);
+                                colorPressed.current = true;
+                                changeSV(e);
+                            }}
+                            width={SIZE}
+                            height={SIZE} />
+                    </div>
 
                     <canvas
                         ref={sliderCanvasRef}
@@ -182,20 +158,62 @@ export default function Colorpicker() {
                             sliderPressed.current = true;
                             changeHue(e);
                         }}
-                        width={SIZE}
+                        width={SIZE * 2}
                         height={SLIDER_HEIGHT} />
                 </div>
             </div>
 
-            <code>
-                <ColorInput ref={rgbInputRef} defaultValue={css.rgb} onChange={(v, t) => colorInputChange(v, t, css.rgb)} />
-                <ColorInput ref={rgbCommaInputRef} defaultValue={css.rgbComma} onChange={(v, t) => colorInputChange(`rgb(${v})`, t, css.rgbComma)} />
-                <ColorInput ref={hexInputRef} defaultValue={css.hex} onChange={(v, t) => colorInputChange(v, t, css.hex)} />
-                <ColorInput ref={hslInputRef} defaultValue={css.hsl} onChange={(v, t) => colorInputChange(v, t, css.hsl)} />
-            </code>
+            <div className="flex justify-center">
+                <div className="inline-grid grid-cols-2">
+                    <ColorInput ref={rgbInputRef} defaultValue={css.rgb} onChange={(v, t) => colorInputChange(v, t, css.rgb)} color={css.rgb} />
+                    <ColorInput ref={rgbCommaInputRef} defaultValue={css.rgbComma} onChange={(v, t) => colorInputChange(`rgb(${v})`, t, css.rgbComma)} color={css.rgb} />
+                    <ColorInput ref={hexInputRef} defaultValue={css.hex} onChange={(v, t) => colorInputChange(v, t, css.hex)} color={css.rgb} />
+                    <ColorInput ref={hslInputRef} defaultValue={css.hsl} onChange={(v, t) => colorInputChange(v, t, css.hsl)} color={css.rgb} />
+                </div>
+            </div>
         </main>
     );
 }
+
+/**
+ * DefaultValue: On mount, this is the initial value (it won't be read again)
+ */
+function ColorInput({ ref, defaultValue, onChange, color }: {
+    ref: React.RefObject<HTMLInputElement | null>;
+    defaultValue: string;
+    onChange: (value: string, target: HTMLInputElement) => void;
+    color: string;
+}) {
+    const [copied, setCopied] = useState(false);
+
+    function copy() {
+        navigator.clipboard.writeText(ref.current?.value ?? "");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1000);
+    }
+
+    return (
+        <div className="relative inline-block m-2">
+            <input
+                ref={ref}
+                defaultValue={defaultValue}
+                onBlur={e => onChange(e.target.value, e.target)}
+                onKeyDown={e => e.key == "Enter" && onChange(e.currentTarget.value, e.currentTarget)}
+                className="p-2 dark:bg-black/50 border border-black/15 rounded-xl pr-8 outline-0 focus:ring-2 font-mono"
+                style={{ "--tw-ring-color": color } as React.CSSProperties}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+            />
+            <button
+                onClick={copy}
+                className="absolute right-3 cursor-pointer top-1/2 -translate-y-1/2"
+            >{copied ? <MdCheck /> : <MdOutlineContentCopy />}</button>
+        </div>
+    );
+}
+
 
 /**
  * Range from [0-1] source https://stackoverflow.com/a/17243070/13759058
