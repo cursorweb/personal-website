@@ -9,6 +9,7 @@ export function ToolsNav() {
             <ToolsNavLink href="/tools">Tools</ToolsNavLink>
             <ToolsNavLink href="/tools/keys">Keys</ToolsNavLink>
             <ToolsNavLink href="/tools/colorpicker">Colorpicker</ToolsNavLink>
+            <ToolsNavLink href="/tools/wordcount">Word Count</ToolsNavLink>
         </nav>
     );
 }
