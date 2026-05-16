@@ -1,17 +1,21 @@
 "use client";
 import clsx from "clsx";
-import { ChangeEvent, useEffect, useReducer, useRef } from "react";
+import { ChangeEvent, useEffect, useReducer, useRef, useState } from "react";
 
 function escape(s: string) {
     return s.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]!));
 }
 
-function computeMatches(text: string, pattern: string, useRegex: boolean): RegExpMatchArray[] {
+function makeRegex(pattern: string, useRegex: boolean) {
+    return useRegex
+        ? new RegExp(pattern, "g")
+        : new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
+}
+
+function computeMatches(text: string, pattern: string, useRegex: boolean) {
     if (pattern == "") return [];
     try {
-        const regex = useRegex
-            ? new RegExp(pattern, "g")
-            : new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
+        const regex = makeRegex(pattern, useRegex);
         return [...text.matchAll(regex)];
     } catch {
         return [];
@@ -28,11 +32,13 @@ interface State {
 };
 
 type Action =
-    | { type: "SET_TEXT"; text: string }
-    | { type: "SET_PATTERN"; pattern: string }
+    | { type: "SET_TEXT", text: string }
+    | { type: "SET_PATTERN", pattern: string }
     | { type: "TOGGLE_REGEX" }
     | { type: "NEXT_MATCH" }
-    | { type: "PREV_MATCH" };
+    | { type: "PREV_MATCH" }
+    | { type: "REPLACE_ALL", replace: string }
+    | { type: "REPLACE_ONE", replace: string };
 
 // debugging
 const INITIAL_TEXT = "The quick brown fox jumps over the lazy dog";
@@ -76,6 +82,40 @@ function reducer(state: State, action: Action): State {
         case "PREV_MATCH": {
             if (state.matches.length == 0) return state;
             return { ...state, currMatchIdx: (state.currMatchIdx - 1 + state.matches.length) % state.matches.length };
+        }
+
+        case "REPLACE_ALL": {
+            const { pattern, useRegex } = state;
+            const replace = action.replace;
+            const regex = makeRegex(pattern, useRegex);
+
+            const text = state.text.replace(regex, replace);
+            const matches = computeMatches(text, pattern, useRegex);
+            return { ...state, text, matches, currMatchIdx: 0 };
+        }
+
+        case "REPLACE_ONE": {
+            const match = state.matches[state.currMatchIdx];
+            if (match?.index == null) return state;
+
+            const { text, pattern, useRegex } = state;
+            const replace = action.replace;
+
+            const start = match.index;
+            const end = start + match[0].length;
+
+            const newText = `${text.slice(0, start)}${replace}${text.slice(end)}`;
+            const newMatches = computeMatches(newText, pattern, useRegex);
+
+            // find the next match not contained by our current match
+            const nextIdx = newMatches.findIndex(m => m.index! >= start + replace.length);
+
+            return {
+                ...state,
+                text: newText,
+                matches: newMatches,
+                currMatchIdx: nextIdx == -1 ? 0 : nextIdx,
+            };
         }
     }
 }
@@ -124,6 +164,10 @@ function setCursorOffset(div: HTMLDivElement, offset: number) {
 
 export default function WordCount() {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    const [replaceVisible, setReplaceVisible] = useState(false);
+    const replaceText = useRef("");
+
     const textboxRef = useRef<HTMLDivElement>(null);
 
     function textBoxChange(e: ChangeEvent<HTMLDivElement>) {
@@ -198,8 +242,14 @@ export default function WordCount() {
                         >.*</button>
                         <button onClick={() => dispatch({ type: "PREV_MATCH" })}>^</button>
                         <button onClick={() => dispatch({ type: "NEXT_MATCH" })}>v</button>
-                        <button>...</button>
+                        <button onClick={() => setReplaceVisible(v => !v)}>...</button>
                     </div>
+                    {replaceVisible && <div>
+                        <input onChange={e => replaceText.current = e.target.value} />
+
+                        <button onClick={() => dispatch({ type: "REPLACE_ALL", replace: replaceText.current })}>Replace All</button>
+                        <button onClick={() => dispatch({ type: "REPLACE_ONE", replace: replaceText.current })}>Replace One</button>
+                    </div>}
                     <div>{state.wordCount}</div>
                 </div>
 
