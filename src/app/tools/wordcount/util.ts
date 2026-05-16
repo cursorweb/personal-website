@@ -1,4 +1,4 @@
-export function escape(s: string) {
+export function escapeToHtml(s: string) {
     return s.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]!));
 }
 

@@ -17,11 +17,8 @@ export type Action =
     | { type: "REPLACE_ALL"; replace: string }
     | { type: "REPLACE_ONE"; replace: string };
 
-// debugging
-export const INITIAL_TEXT = "The quick brown fox jumps over the lazy dog";
-
 export const initialState: State = {
-    text: INITIAL_TEXT,
+    text: "",
     pattern: "",
     useRegex: true,
     matches: [],
