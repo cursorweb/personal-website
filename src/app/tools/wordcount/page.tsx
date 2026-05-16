@@ -12,7 +12,7 @@ export default function WordCount() {
     const textboxRef = useRef<HTMLDivElement>(null);
 
     function textBoxChange(e: ChangeEvent<HTMLDivElement>) {
-        dispatch({ type: "SET_TEXT", text: e.target.textContent });
+        dispatch({ type: "SET_TEXT", text: e.target.textContent! });
     }
 
     useEffect(() => {
