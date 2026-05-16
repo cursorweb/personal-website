@@ -1,54 +1,164 @@
 "use client";
-import { ChangeEvent, useRef, useState } from "react";
-
+import clsx from "clsx";
+import { ChangeEvent, useEffect, useReducer, useRef } from "react";
 
 function escape(s: string) {
     return s.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]!));
 }
 
-export default function WordCount() {
-    const [wordCount, setWordCount] = useState(0);
-    const [useRegex, setUseRegex] = useState(true);
-    const textboxRef = useRef<HTMLDivElement>(null);
-    const searchRef = useRef<HTMLInputElement>(null);
-
-    function textBoxChange(e: ChangeEvent<HTMLDivElement>) {
-        const v = e.target.textContent.trim();
-        setWordCount(v == "" ? 0 : v.split(/\s+/).length);
-        findMatch(searchRef.current!.value);
+function computeMatches(text: string, pattern: string, useRegex: boolean): RegExpMatchArray[] {
+    if (pattern == "") return [];
+    try {
+        const regex = useRegex
+            ? new RegExp(pattern, "g")
+            : new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
+        return [...text.matchAll(regex)];
+    } catch {
+        return [];
     }
+}
 
-    function findMatch(input: string) {
-        try {
-            const div = textboxRef.current!;
+interface State {
+    text: string;
+    wordCount: number;
+    pattern: string;
+    useRegex: boolean;
+    matches: RegExpMatchArray[];
+    currMatchIdx: number;
+};
 
-            if (input == "") {
-                // remove any previous highlight
-                div.innerHTML = escape(div.textContent);
-                return;
-            }
+type Action =
+    | { type: "SET_TEXT"; text: string }
+    | { type: "SET_PATTERN"; pattern: string }
+    | { type: "TOGGLE_REGEX" }
+    | { type: "NEXT_MATCH" }
+    | { type: "PREV_MATCH" };
 
-            const regex = new RegExp(input, 'g');
-            const text = div.textContent;
-            const matches = [...text.matchAll(regex)];
+// debugging
+const INITIAL_TEXT = "The quick brown fox jumps over the lazy dog";
 
-            let newText = "";
-            let prevIdx = 0;
-            let currMatch = 0;
-            for (let i = 0; i < matches.length; ++i) {
-                const match = matches[i];
-                newText += escape(text.slice(prevIdx, match.index));
-                newText += `<span style="background: ${i == currMatch ? "blue" : "red"};">${escape(match[0])}</span>`;
-                prevIdx = match.index + match[0].length;
-            }
+const initialState: State = {
+    text: INITIAL_TEXT,
+    wordCount: INITIAL_TEXT.trim().split(/\s+/).length,
+    pattern: "",
+    useRegex: true,
+    matches: [],
+    currMatchIdx: 0,
+};
 
-            newText += escape(text.slice(prevIdx));
-            div.innerHTML = newText;
-        } catch {
-            // show red
-            return;
+function reducer(state: State, action: Action): State {
+    switch (action.type) {
+        case "SET_TEXT": {
+            const text = action.text;
+            const wordCount = text.trim() == "" ? 0 : text.trim().split(/\s+/).length;
+            const matches = computeMatches(text, state.pattern, state.useRegex);
+            const currMatchIdx = Math.min(state.currMatchIdx, Math.max(0, matches.length - 1));
+            return { ...state, text, wordCount, matches, currMatchIdx };
+        }
+
+        case "SET_PATTERN": {
+            const pattern = action.pattern;
+            const matches = computeMatches(state.text, pattern, state.useRegex);
+            return { ...state, pattern, matches, currMatchIdx: 0 };
+        }
+
+        case "TOGGLE_REGEX": {
+            const useRegex = !state.useRegex;
+            const matches = computeMatches(state.text, state.pattern, useRegex);
+            return { ...state, useRegex, matches, currMatchIdx: 0 };
+        }
+
+        case "NEXT_MATCH": {
+            if (state.matches.length == 0) return state;
+            return { ...state, currMatchIdx: (state.currMatchIdx + 1) % state.matches.length };
+        }
+
+        case "PREV_MATCH": {
+            if (state.matches.length == 0) return state;
+            return { ...state, currMatchIdx: (state.currMatchIdx - 1 + state.matches.length) % state.matches.length };
         }
     }
+}
+
+function getCursorOffset(div: HTMLDivElement): number {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount == 0) return 0;
+    const range = sel.getRangeAt(0);
+    const pre = range.cloneRange();
+    pre.selectNodeContents(div);
+    pre.setEnd(range.startContainer, range.startOffset);
+    return pre.toString().length;
+}
+
+function setCursorOffset(div: HTMLDivElement, offset: number) {
+    const sel = window.getSelection();
+    if (!sel) return;
+    const range = document.createRange();
+    let remaining = offset;
+
+    function walk(node: Node): boolean {
+        if (node.nodeType == Node.TEXT_NODE) {
+            const len = node.textContent!.length;
+            if (remaining <= len) {
+                range.setStart(node, remaining);
+                range.collapse(true);
+                return true;
+            }
+            remaining -= len;
+        } else {
+            for (const child of node.childNodes) {
+                if (walk(child)) return true;
+            }
+        }
+        return false;
+    }
+
+    if (!walk(div)) {
+        range.setStart(div, 0);
+        range.collapse(true);
+    }
+
+    sel.removeAllRanges();
+    sel.addRange(range);
+}
+
+export default function WordCount() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const textboxRef = useRef<HTMLDivElement>(null);
+
+    function textBoxChange(e: ChangeEvent<HTMLDivElement>) {
+        dispatch({ type: "SET_TEXT", text: e.target.textContent });
+    }
+
+    useEffect(() => {
+        // updates visually (highlights, and cursor position)
+        const div = textboxRef.current;
+        if (!div) return;
+
+        const hasFocus = div.contains(document.activeElement);
+
+        // get offset if needed so user doesn't lose cursor position
+        const offset = hasFocus ? getCursorOffset(div) : 0;
+
+        if (state.pattern == "") {
+            div.innerHTML = escape(state.text);
+        } else {
+            let html = "";
+            let prevIdx = 0;
+            for (let i = 0; i < state.matches.length; i++) {
+                const match = state.matches[i];
+                html += escape(state.text.slice(prevIdx, match.index));
+                html += `<span style="background:${i == state.currMatchIdx ? "blue" : "red"};">${escape(match[0])}</span>`;
+                prevIdx = match.index! + match[0].length;
+            }
+            html += escape(state.text.slice(prevIdx));
+            div.innerHTML = html;
+        }
+
+        if (hasFocus) setCursorOffset(div, offset);
+    }, [state]);
+
+    const noResult = state.pattern != "" && state.matches.length == 0;
 
     return (
         <>
@@ -61,21 +171,36 @@ export default function WordCount() {
                     ref={textboxRef}
                     contentEditable
                     suppressContentEditableWarning={true}
-
-                    onChange={textBoxChange}
+                    onInput={textBoxChange}
                 >
-                    The quick brown fox jumps over the lazy dog
+                    {INITIAL_TEXT}
                 </div>
 
                 <div className="flex flex-row justify-between">
                     <div>
-                        <input onChange={e => findMatch(e.target!.value)} ref={searchRef} />
-                        <button>.*</button>
-                        <button>^</button>
-                        <button>v</button>
+                        <input
+                            value={state.pattern}
+                            onChange={e => dispatch({ type: "SET_PATTERN", pattern: e.target.value })}
+                            onKeyDown={e => {
+                                if (e.key == "Enter") {
+                                    if (e.shiftKey) {
+                                        dispatch({ type: "PREV_MATCH" });
+                                    } else {
+                                        dispatch({ type: "NEXT_MATCH" });
+                                    }
+                                }
+                            }}
+                            className={clsx(noResult && "bg-red-400")}
+                        />
+                        <button
+                            onClick={() => dispatch({ type: "TOGGLE_REGEX" })}
+                            className={clsx("border", state.useRegex ? "border-black" : "border-transparent")}
+                        >.*</button>
+                        <button onClick={() => dispatch({ type: "PREV_MATCH" })}>^</button>
+                        <button onClick={() => dispatch({ type: "NEXT_MATCH" })}>v</button>
                         <button>...</button>
                     </div>
-                    <div>{wordCount}</div>
+                    <div>{state.wordCount}</div>
                 </div>
 
                 <button>Escape Codes</button>
@@ -83,7 +208,7 @@ export default function WordCount() {
                 <button>Normalize Quotes</button>
 
                 <button>Copy unformatted</button>
-            </div >
+            </div>
         </>
     );
 }
