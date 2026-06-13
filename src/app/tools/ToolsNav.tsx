@@ -9,6 +9,7 @@ export function ToolsNav() {
             <ToolsNavLink href="/tools">Tools</ToolsNavLink>
             <ToolsNavLink href="/tools/keys">Keys</ToolsNavLink>
             <ToolsNavLink href="/tools/colorpicker">Colorpicker</ToolsNavLink>
+            <ToolsNavLink href="/tools/wordcount">Word Count</ToolsNavLink>
         </nav>
     );
 }
@@ -19,8 +20,8 @@ function ToolsNavLink({ children, href }: { href: string } & React.PropsWithChil
 
     return (
         <Link href={href} className={clsx(
-            "transition py-2 px-6 rounded-full border border-gray-300 dark:border-black/20 hover:bg-gray-300 dark:hover:bg-black/20",
-            active && "bg-gray-300 dark:bg-black/20",
+            "transition py-2 px-6 rounded-full border border-gray-300 dark:border-stone-700 hover:bg-gray-300 dark:hover:bg-black/40",
+            active && "bg-gray-300 dark:bg-black/60",
         )}>
             {children}
         </Link>
