@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JZ</title>
+    <link rel="shortcut icon" href="canvas.png" type="image/x-icon">
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@1,700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.13/lib/p5.min.js"></script>
+    <script>
+        const SIZE = 450;
+        const C = SIZE / 2;
+        const BRUSH = 20;
+        // const R = 200;
+        const CIRC_COLOR = "#230a76";
+
+        function setup() {
+            createCanvas(SIZE, SIZE);
+            noLoop();
+
+            themeRect(0, 0, width, height, 100);
+            fill(CIRC_COLOR);
+            const { rectX, rectY, rectW, rectH, textX, textY } = calcCenteredText("JZ", 300);
+
+            strokeWeight(50);
+            stroke(255);
+            fill(CIRC_COLOR);
+            text("JZ", textX, textY);
+            // push();
+            // noStroke();
+            // fill(255);
+            // const slant = -57; // 57
+            // const h = 60; // 60
+            // const w = 80;
+
+            // translate(C + 100, C);
+
+            // // define center-based quad
+            // quad(
+            //     -w / 2, -h / 2,
+            //     w / 2, -h / 2,
+            //     w / 2 + slant, h / 2,
+            //     -w / 2 + slant, h / 2
+            // );
+            // pop();
+        }
+
+        function calcCenteredText(textStr, fontSize, padding = 0) {
+            const fontName = "Chakra Petch";
+            textSize(fontSize);
+
+            const ctx = drawingContext;
+            ctx.font = `${fontSize}px "${fontName}"`;
+
+            const m = ctx.measureText(textStr);
+
+            const w = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+            const h = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+
+            // baseline position that centers the glyphs
+            const textX = width / 2 + m.actualBoundingBoxLeft - w / 2;
+            const textY = height / 2 + (h / 2 - m.actualBoundingBoxDescent);
+
+            const rectX = textX - m.actualBoundingBoxLeft - padding;
+            const rectY = textY - m.actualBoundingBoxAscent - padding;
+            const rectW = w + padding * 2;
+            const rectH = h + padding * 2;
+
+            return {
+                textX,
+                textY,
+                rectX,
+                rectY,
+                rectW,
+                rectH,
+                centerX: width / 2,
+                centerY: height / 2,
+            };
+        }
+
+        function themeRect(x, y, w, h, r) {
+            const ctx = drawingContext;
+            const grad = ctx.createLinearGradient(x, y, x + w, y + h);
+            grad.addColorStop(0, '#a8e4fc'); // sky
+            grad.addColorStop(1, '#c084fc'); // purple
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            noStroke();
+            ctx.roundRect(x, y, w, h, r);
+            ctx.fill();
+        }
+
+        // Fills a variable-width arc as a polygon.
+        // Width follows sin(t·π): 0 at both tips, maxW at the midpoint.
+        function taperedArc(cx, cy, r, startA, endA, maxW, steps = 300) {
+            while (endA < startA) endA += TWO_PI;
+
+            const outer = [], inner = [];
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const a = lerp(startA, endA, t);
+                const w = maxW * sin(t * PI);
+                outer.push([cx + (r + w / 2) * cos(a), cy + (r + w / 2) * sin(a)]);
+                inner.push([cx + (r - w / 2) * cos(a), cy + (r - w / 2) * sin(a)]);
+            }
+            inner.reverse();   // trace inner edge backwards to close the shape
+
+            noStroke();
+            beginShape();
+            outer.forEach(([x, y]) => vertex(x, y));
+            inner.forEach(([x, y]) => vertex(x, y));
+            endShape(CLOSE);
+        }
+
+        function mouseClicked() {
+            console.log(mouseX, mouseY);
+        }
+    </script>
+</body>
+
+</html>
