@@ -4,7 +4,7 @@ import { Providers } from "./providers";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Jerry Zhang",
+    title: "Jerry Zhang | Developer",
     description: "Hello! I am Jerry Zhang, a freshman at University of Illinois, Urbana-Champaign majoring in Math and Computer Science.",
     openGraph: {
         title: "Jerry Zhang",

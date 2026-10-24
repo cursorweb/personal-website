@@ -57,7 +57,7 @@ function SocialMedia() {
             hover: "group-hover:text-purple-700",
         },
         {
-            href: "https://www.linkedin.com/in/jzhang2029/",
+            href: "https://www.linkedin.com/in/jzhang1707/",
             label: "LinkedIn",
             Icon: FaLinkedin,
             hover: "group-hover:text-[#0a66c2]",
